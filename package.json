@@ -1,0 +1,14 @@
+{
+  "name": "pmonger",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "web":"clear && cd web && npm run dev",
+    "api":"clear && cd api && npm run dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
