@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    /* Language & runtime */
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "module": "ESNext",
+    "moduleResolution": "Node",
+
+    /* Strictness */
+    "strict": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /* Interop */
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+
+    /* Project structure */
+    "rootDir": "src",
+    "outDir": "dist",
+
+    /* Dev vs prod behavior */
+    "noEmit": true,
+    "allowJs": false,
+    "allowImportingTsExtensions": false
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}
