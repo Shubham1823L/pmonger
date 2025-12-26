@@ -1,0 +1,54 @@
+.navbarWrapper {
+    width: 300px;
+    height: 100vh;
+    height: 100dvh;
+
+    padding: 1rem;
+    border-right: .5px solid var(--neutral-border);
+
+
+}
+
+.navbar {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.navLogoWrapper {
+    font-size: 14px;
+    padding: .8em;
+    margin-bottom: 1rem;
+}
+
+.navItem {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    width: 100%;
+
+    font-size: 14px;
+    padding: .8em;
+    border-radius: 8px;
+    transition: all .15s linear;
+
+    &:hover {
+        background-color: var(--neutral-hover);
+    }
+
+
+    svg {
+        --size: 20px;
+        width: var(--size);
+        height: var(--size);
+        stroke-width: 1.5;
+    }
+}
+
+.activeLink {
+    color: var(--primary-400);
+}
+
+.navbarLowerList {
+    margin-top: auto;
+}

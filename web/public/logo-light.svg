@@ -1,0 +1,42 @@
+<svg
+  width="230"
+  height="48"
+  viewBox="0 0 230 48"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <!-- Icon -->
+  <g transform="translate(0,4)">
+    <rect x="0" y="0" width="40" height="40" rx="10" fill="hsl(248, 98%, 61%)" />
+
+    <path
+      d="M14 10h10c5 0 8 3 8 7s-3 7-8 7h-6v6h-4V10z"
+      fill="white"
+      opacity="0.95"
+    />
+
+    <path
+      d="M14 26l4 4 8-8"
+      stroke="#22c55e"
+      stroke-width="3"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </g>
+
+  <!-- Text -->
+  <text
+    x="56"
+    y="32"
+    font-family="Inter, system-ui, sans-serif"
+    font-weight="600"
+  >
+    <tspan
+      font-size="30"
+      fill="hsl(248, 98%, 61%)"
+    >P</tspan><tspan
+      font-size="22"
+      fill="#1f2937"
+    >Monger</tspan>
+  </text>
+</svg>
