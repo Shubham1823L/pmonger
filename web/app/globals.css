@@ -70,24 +70,27 @@ h6 {
 /* Global Variables */
 
 :root {
-    --neutral: hsl(0 0 0);
+    --neutral: hsl(0 0 3);
+    --neutral-lighter: hsl(0 0 5);
+    --neutral-500: hsl(0 0 9);
     --neutral-hover: hsl(0 0 10);
-    --neutral-border:hsl(0 0 15);
+    --neutral-border: hsl(0 0 15);
 
+
+    --font-neutral: hsl(0 0 95);
 
     --primary-400: hsl(248, 98%, 61%);
 
 
-    
+
 }
 
 /* General Styling */
 
 body {
     background-color: var(--neutral);
-    color: white;
-
-    display: flex;
+    color: var(--font-neutral);
+    display: flex
 }
 
 main {

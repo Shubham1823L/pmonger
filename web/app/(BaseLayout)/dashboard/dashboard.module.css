@@ -1,0 +1,49 @@
+.wrapper {
+    /* border: 1px solid aqua; */
+    min-height: 100%;
+}
+
+.topCards {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: .5rem;
+    flex-wrap: wrap;
+}
+
+.topCard {
+    flex: 1;
+    border-radius: 8px;
+    padding: .5em 1em;
+    display: grid;
+    gap: .5rem;
+    background-color: var(--neutral-500);
+    border: .5px solid var(--neutral-border);
+}
+
+.topCardMetrics {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+
+
+    >span:last-child {
+        font-size: 14px;
+    }
+
+    >span:first-child {
+        font-size: 2rem;
+    }
+}
+
+.topCardTrending {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+
+    svg {
+        border-radius: 50%;
+        background-color: hsl(120, 100%, 80%);
+        padding: .2em;
+    }
+}
