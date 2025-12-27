@@ -20,7 +20,7 @@ const ProductsByCategoryChart = ({ data }: ProductsByCategoryChartProps) => {
                     <XAxis dataKey={'category'} stroke='var(--font-neutral)' fontSize={14} />
                     <YAxis dataKey={'value'} stroke='var(--font-neutral)' fontSize={14} />
                     <Tooltip cursor={{ fill: 'var(--neutral-hover)' }} />
-                    <Bar fill='var(--primary-300)' dataKey='value' type={'monotone'} name='Products Added' stroke='var(--primary-300)' />
+                    <Bar fill='var(--primary-300)' dataKey='value' type={'monotone'} name='Products' stroke='var(--primary-300)' />
                 </BarChart>
             </ResponsiveContainer>
         </div>

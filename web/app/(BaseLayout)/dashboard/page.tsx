@@ -4,9 +4,10 @@ import { Metadata } from 'next'
 import TopCard from '@/components/Dashboard/TopCard'
 import ProductsByDayChart from '@/components/Dashboard/charts/ProductsByDayChart'
 import ProductsByCategoryChart from '@/components/Dashboard/charts/ProductsByCategoryChart'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: "Dashboard"
+  title: "Dashboard - PMonger"
 }
 
 const Dashboard = () => {
@@ -46,6 +47,49 @@ const Dashboard = () => {
       <div className={styles.charts}>
         <ProductsByDayChart data={data1} />
         <ProductsByCategoryChart data={data2} />
+      </div>
+
+      <div className={styles.tableWrapper}>
+        <div className={styles.tableHeader}>
+          <span>Recently Updated</span>
+          <Link href={'/products'}>View all products</Link>
+        </div>
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Status</th>
+              <th>Updated</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><Link href={`/products`}>RGX Pro 112 Z</Link></td>
+              <td>Out of Stock</td>
+              <td>25d ago</td>
+            </tr>
+            <tr>
+              <td><Link href={`/products`}>RGX Pro 112 Z</Link></td>
+              <td>Published</td>
+              <td>2d ago</td>
+            </tr>
+            <tr>
+              <td><Link href={`/products`}>RGX Pro 112 Z</Link></td>
+              <td>Published</td>
+              <td>2d ago</td>
+            </tr>
+            <tr>
+              <td><Link href={`/products`}>RGX Pro 112 Z</Link></td>
+              <td>Published</td>
+              <td>2d ago</td>
+            </tr>
+            <tr>
+              <td><Link href={`/products`}>RGX Pro 112 Z</Link></td>
+              <td>Published</td>
+              <td>2d ago</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
 

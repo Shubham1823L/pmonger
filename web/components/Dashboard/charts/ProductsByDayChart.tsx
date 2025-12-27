@@ -12,7 +12,7 @@ const ProductsByDayChart = ({ data }: ProductsByDayChartProps) => {
     return (
         <div className={styles.chartWrapper}>
             <div className={styles.chartHeader}>
-                <p className={styles.charTitle}>Products Added</p>
+                <p className={styles.charTitle}>New Products</p>
             </div>
 
             <ResponsiveContainer width={'100%'} minHeight={300} >

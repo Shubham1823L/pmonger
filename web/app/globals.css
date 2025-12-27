@@ -94,6 +94,7 @@ body {
     color: var(--font-neutral);
     display: flex;
     max-width: 1920px;
+    margin: auto;
 }
 
 main {
