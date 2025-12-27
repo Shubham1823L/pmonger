@@ -1,6 +1,6 @@
 import Navbar from "@/components/BaseLayout/Navbar";
 import type { Metadata } from "next";
-
+import styles from './layout.module.css'
 
 
 export const metadata: Metadata = {
@@ -16,7 +16,7 @@ export default function BaseLayout({
     return (
         <>
             <Navbar />
-            <main>
+            <main className={styles.main}>
                 {children}
             </main>
         </>
