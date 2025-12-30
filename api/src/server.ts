@@ -1,5 +1,6 @@
 import express from 'express'
 import cors from 'cors'
+import cookieParser from 'cookie-parser'
 
 import responseHandler from './utils/responseHandler'
 import errorMiddleware from './middlewares/errorMiddleware'
@@ -17,6 +18,7 @@ app.use(cors({
     credentials: true
 }))
 app.use(express.json())
+app.use(cookieParser())
 app.use(responseHandler)
 
 

@@ -34,3 +34,15 @@ enum ProductStatus {
   Draft
   Published
 }
+
+// model OtpLimit {
+  
+// }
+
+// model SignupSession {
+//   otpUUID String @id 
+//   otpHash String
+//   email String
+//   passwordHash String
+//   fullName String
+// }
