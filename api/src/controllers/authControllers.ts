@@ -35,6 +35,22 @@ export const signup: RequestHandler = async (req, res) => {
         parallelism: 1 // threads used
     })
 
+    const user = await prisma.user.create({
+        data: {
+            email, fullName, passwordHash
+        },
+        select: { id: true, email: true, fullName: true }
+    })
+
+    const accessToken = await generateAccessToken(email)
+    const refreshToken = await generateRefreshToken(email)
+
+    res.cookie('accessToken', accessToken, ACCESS_COOKIE_OPTIONS)
+    res.cookie('refreshToken', refreshToken, REFRESH_COOKIE_OPTIONS)
+
+    return res.success(201, { user }, "Account created successfully")
+
+
     const otp = Math.floor(Math.random() * (1e6 - 1e5) + 1e5)
 
     //Generating otpHash
@@ -71,6 +87,7 @@ export const login: RequestHandler = async (req, res) => {
         select: { fullName: true, email: true, id: true, passwordHash: true }
     })
     if (!user?.passwordHash || !await argon2.verify(user.passwordHash, password)) return res.fail(401)
+    const { passwordHash, ...filterdUser } = user
 
     // User successfully authenticated, creating JWTs
     const accessToken = await generateAccessToken(email)
@@ -79,7 +96,7 @@ export const login: RequestHandler = async (req, res) => {
     res.cookie('accessToken', accessToken, ACCESS_COOKIE_OPTIONS)
     res.cookie('refreshToken', refreshToken, REFRESH_COOKIE_OPTIONS)
 
-    return res.success(200, { user })
+    return res.success(200, { user: filterdUser })
 }
 
 export const logout: RequestHandler = (req, res) => {

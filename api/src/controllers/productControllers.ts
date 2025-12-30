@@ -12,7 +12,7 @@ const ProductSchema = z.object({
 
 
 export const publishNewProduct: RequestHandler = async (req, res) => {
-    const user = { id: '1', fullName: "Shubham Panjiyara", email: "shubhuisbetter@gmail.com" }
+    const user = req.user
     const parsedData = ProductSchema.safeParse(req.body)
     if (!parsedData.success) return res.fail(400, "BAD_REQUEST", "Invalid details")
 
@@ -27,7 +27,7 @@ export const publishNewProduct: RequestHandler = async (req, res) => {
 }
 
 export const getProducts: RequestHandler = async (req, res) => {
-    const user = { id: '1', fullName: "Shubham Panjiyara", email: "shubhuisbetter@gmail.com" }
+    const user = req.user
 
     const products = await prisma.product.findMany({
         where: {
@@ -40,7 +40,7 @@ export const getProducts: RequestHandler = async (req, res) => {
 
 
 export const deleteProduct: RequestHandler = async (req, res) => {
-    const user = { id: '1', fullName: "Shubham Panjiyara", email: "shubhuisbetter@gmail.com" }
+    const user = req.user
     const productId = req.params.productId
     if (!productId) return res.fail(400, "BAD_REQUEST", "Product id not received")
 

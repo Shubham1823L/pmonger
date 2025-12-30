@@ -6,7 +6,7 @@ import responseHandler from './utils/responseHandler'
 import errorMiddleware from './middlewares/errorMiddleware'
 
 import authRoutes from './routes/authRoutes'
-import productRoutes from './routes/authRoutes'
+import productRoutes from './routes/productRoutes'
 import env from './config/env'
 
 
