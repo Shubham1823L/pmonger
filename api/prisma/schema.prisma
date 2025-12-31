@@ -23,6 +23,7 @@ model Product {
   price     Float
   stock     Int
   status    ProductStatus
+  //###FIX time issue later
   createdAt DateTime      @default(now()) @db.Timestamptz(3)
   updatedAt DateTime      @updatedAt @db.Timestamptz(3)
 

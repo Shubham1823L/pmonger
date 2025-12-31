@@ -7,6 +7,8 @@ import errorMiddleware from './middlewares/errorMiddleware'
 
 import authRoutes from './routes/authRoutes'
 import productRoutes from './routes/productRoutes'
+import uploadFileRoutes from './routes/uploadFileRoutes'
+
 import env from './config/env'
 
 
@@ -24,6 +26,7 @@ app.use(responseHandler)
 
 app.use('/api/auth', authRoutes)
 app.use('/api/products', productRoutes)
+app.use('/api/uploadFile',uploadFileRoutes)
 
 
 app.use(errorMiddleware)
