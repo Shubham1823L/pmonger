@@ -8,6 +8,42 @@ datasource db {
 }
 
 model User {
-  id String @id @default(uuid())
-  name String
+  id           String    @id @default(uuid())
+  fullName     String
+  email        String    @unique
+  passwordHash String?
+  products     Product[]
 }
+
+model Product {
+  id             String  @id @default(uuid())
+  name           String
+  avatarPublicId String?
+
+  price     Float
+  stock     Int
+  status    ProductStatus
+  //###FIX time issue later
+  createdAt DateTime      @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime      @updatedAt @db.Timestamptz(3)
+
+  ownerId String
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+}
+
+enum ProductStatus {
+  Draft
+  Published
+}
+
+// model OtpLimit {
+  
+// }
+
+// model SignupSession {
+//   otpUUID String @id 
+//   otpHash String
+//   email String
+//   passwordHash String
+//   fullName String
+// }
