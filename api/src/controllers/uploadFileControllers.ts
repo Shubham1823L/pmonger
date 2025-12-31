@@ -3,7 +3,6 @@ import cloudinary from "../config/cloudinary";
 import fs from 'fs'
 
 export const uploadFile: RequestHandler = async (req, res) => {
-    const user = req.user
     const file = req.file
     if (!file) return res.fail(400, "EMPTY_FILE", "File was empty")
 
@@ -21,5 +20,5 @@ export const uploadFile: RequestHandler = async (req, res) => {
         }
     })
 
-    res.success(200, { file, result })
+    res.success(201, { publicId: result.public_id })
 }

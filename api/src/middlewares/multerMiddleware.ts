@@ -3,13 +3,13 @@ import fs from 'fs'
 import { RequestHandler } from "express"
 
 export const checkUploadPath: RequestHandler = async (req, res, next) => {
-    await fs.promises.mkdir('tmp/uploads', { recursive: true })
+    await fs.promises.mkdir('tmp', { recursive: true })
     next()
 }
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'tmp/uploads')
+        cb(null, 'tmp')
     },
     filename: function (req, file, cb) {
         const uniqueFilename = Date.now() + '-' + Math.floor(Math.random() * 1e6) + '-' + file.originalname
