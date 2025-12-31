@@ -3,7 +3,9 @@ import { RequestHandler } from "express"
 import prisma from "../config/prisma"
 import * as z from 'zod'
 import * as argon2 from "argon2"
-import { generateAccessToken, generateRefreshToken } from "../utils/generateToken"
+import { generateAccessToken, generateRefreshToken, generateUint8Array } from "../utils/generateToken"
+import { jwtVerify } from 'jose';
+import env from '../config/env';
 
 
 const SignupSchema = z.object({
@@ -104,4 +106,24 @@ export const logout: RequestHandler = (req, res) => {
     res.clearCookie('refreshToken', REFRESH_COOKIE_OPTIONS)
 
     return res.sendStatus(204)
+}
+
+
+export const refresh: RequestHandler = async (req, res) => {
+    const refreshToken = req.cookies.refreshToken
+    if (!refreshToken) return res.fail(401, "TOKEN_NOT_FOUND", "Session expired, please relogin")
+
+    let decoded
+    try {
+        decoded = await jwtVerify(refreshToken, generateUint8Array(env.REFRESH_TOKEN_SECRET))
+    } catch (error) {
+        return res.fail(401)
+    }
+    const email = decoded.payload.email as string
+    const user = await prisma.user.findUnique({ where: { email } })
+    if (!user) return res.fail(401)
+
+    const accessToken = await generateAccessToken(email)
+    res.cookie('accessToken', accessToken, ACCESS_COOKIE_OPTIONS)
+    return res.success()
 }

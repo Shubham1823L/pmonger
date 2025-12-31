@@ -11,6 +11,7 @@ const ProductSchema = z.object({
 })
 
 
+
 export const publishNewProduct: RequestHandler = async (req, res) => {
     const user = req.user
     const parsedData = ProductSchema.safeParse(req.body)
@@ -39,12 +40,39 @@ export const getProducts: RequestHandler = async (req, res) => {
 }
 
 
+export const getProduct: RequestHandler = async (req, res) => {
+    const product = req.body.product
+    return res.success(200, { product })
+}
+
+export const updateProduct: RequestHandler = async (req, res) => {
+    const { productId } = req.params
+    const parsedData = ProductSchema.partial().safeParse(req.body)
+    if (!parsedData.success || Object.keys(parsedData.data).length === 0) return res.fail(400, "BAD_REQUEST", "Invalid details")
+
+    const productData = parsedData.data
+
+    const updatedProduct = await prisma.product.update({
+        where: { id: productId },
+        data: {
+            ...productData
+        }
+    })
+
+
+    return res.success(200, { product: updatedProduct })
+
+    // ###LATER search about the object[key] issue and fix it
+    // for (const [key, value] of Object.entries(productData)) {
+    // }
+
+}
+
+
 export const deleteProduct: RequestHandler = async (req, res) => {
-    const user = req.user
-    const productId = req.params.productId
+    const { productId } = req.params
     if (!productId) return res.fail(400, "BAD_REQUEST", "Product id not received")
 
-   
     await prisma.product.delete({
         where: {
             id: productId
@@ -53,4 +81,3 @@ export const deleteProduct: RequestHandler = async (req, res) => {
 
     return res.sendStatus(204)
 }
-
