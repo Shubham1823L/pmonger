@@ -101,31 +101,54 @@
     padding: 1em;
     position: relative;
 
-    &:first-child {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+
+}
+
+.td:first-child {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.td:not(:first-child) {
+    flex: 1;
+    display: flex;
+    align-items: center;
+
+    >span {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        line-clamp: 1;
+        overflow-y: hidden;
+        overflow-x: scroll;
     }
 
-    &:not(:first-child) {
-        flex: 1;
-        display: flex;
-        align-items: center;
+}
 
-        >span {
-            display: -webkit-box;
-            -webkit-box-orient: vertical;
-            -webkit-line-clamp: 1;
-            line-clamp: 1;
-            overflow-y: hidden;
-            overflow-x: scroll;
-        }
+.td:last-child {
+    flex-grow: .5;
+}
 
-    }
+.td:nth-child(2) {
+    flex-grow: 2.5;
+    display: flex;
+    gap: .5rem;
+    align-items: center;
+}
 
-    &:last-child {
-        flex-grow: .5;
-    }
+.td:nth-child(3) {
+    flex-grow: 2;
+}
+
+.productImage {
+    --dimension: 32px;
+    border-radius: 8px;
+    object-fit: cover;
+    width: var(--dimension);
+    height: var(--dimension);
+
+
 }
 
 .checkbox {

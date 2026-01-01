@@ -2,14 +2,35 @@ import { Metadata } from 'next'
 import React from 'react'
 import styles from './products.module.css'
 import Link from 'next/link'
-import { Check, Ellipsis, ListFilter, Plus, Search, X, XCircle } from 'lucide-react'
+import { Check, Ellipsis, ListFilter, Plus, Search } from 'lucide-react'
+import fetchData from '@/lib/fetchData'
+import { type Product } from '@/types/product'
+import { redirect } from 'next/navigation'
+import clsx from 'clsx'
+
 
 export const metadata: Metadata = {
     title: "Products - PMonger",
     description: "View and manage your products"
 }
 
-const Products = () => {
+
+
+const Products = async () => {
+    let data
+    try {
+        const response = await fetchData<{ products: Product[] }>('get', 'http://localhost/api/products')
+        data = response.data.data
+    } catch (error) {
+        console.error(error)
+        redirect('/')
+    }
+
+    const { products } = data
+
+
+
+
     return (
         <div className={styles.wrapper}>
             <div className={styles.header}>
@@ -64,11 +85,11 @@ const Products = () => {
                         </div>
                     </div>
                     <div className={styles.tbody}>
-                        <TableRow />
-                        <TableRow />
-                        <TableRow />
-                        <TableRow />
-                        <TableRow />
+                        {products.map(product => {
+                            return (
+                                <TableRow key={product.id} name={product.name} avatarPublicId={product.avatarPublicId} price={product.price} stock={product.stock} status={product.status} />
+                            )
+                        })}
                     </div>
                 </div>
 
@@ -81,8 +102,9 @@ const Products = () => {
 
 export default Products
 
+type TableRowProps = Omit<Product, "id" | "createdAt" | "updatedAt" | "ownerId">
 
-export const TableRow = () => {
+export const TableRow = ({ name, avatarPublicId, price, status, stock }: TableRowProps) => {
     return (
         <div className={styles.tr}>
             <div className={styles.td}>
@@ -90,8 +112,10 @@ export const TableRow = () => {
                 <Check className={styles.checkmark} />
             </div>
             <div className={styles.td}>
+                {/* placeholder for productImage can be an svg or some general professional image either stored locally or rendered via cloudinary */}
+                <img className={styles.productImage} src="https://res.cloudinary.com/dvln1dlk4/image/upload/w_50/q_auto/f_auto/v1767196817/lushiroProject_uploads/1767196816477-900961976_oamtmt.jpg" alt="product-image" />
                 <span>
-                    RGX pro 112 suprabase limited
+                    {name}
                 </span>
 
             </div>
@@ -101,13 +125,13 @@ export const TableRow = () => {
                 </span>
             </div>
             <div className={styles.td}>
-                <span>Out of Stock</span>
+                <span style={{ color: stock === 0 ? 'red' : '' }}>{stock > 0 ? stock : "Out of Stock"}</span>
             </div>
             <div className={styles.td}>
-                <span>$49.99</span>
+                <span>₹{price}</span>
             </div>
             <div className={styles.td}>
-                <span>Published</span>
+                <span style={{ color: status === "Published" ? 'green' : 'yellow' }}>{status}</span>
             </div>
             <div className={styles.td}>
                 <button className={styles.actionsBtn}>
