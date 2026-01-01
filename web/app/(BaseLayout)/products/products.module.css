@@ -74,7 +74,10 @@
     flex: 1;
 }
 
-.table {}
+.table {
+    border-radius: 8px;
+    overflow: hidden;
+}
 
 .thead {
     background-color: var(--neutral-border);
@@ -83,7 +86,16 @@
 .tr {
     display: flex;
     border-bottom: 1px solid var(--neutral-border);
+    transition: all .2s linear;
+
+
 }
+
+.tbody .tr:has(.td input[type='checkbox']:checked) {
+    background-color: hsl(0, 100%, 60%);
+}
+
+
 
 .td {
     padding: 1em;
@@ -121,6 +133,7 @@
     width: 20px;
     height: 20px;
     cursor: pointer;
+    background-color: var(--neutral-500);
 
     &:hover {
         background-color: var(--neutral-border);

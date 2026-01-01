@@ -106,3 +106,6 @@ button,
 a:hover {
     cursor: pointer;
 }
+div[role='button']{
+    cursor: pointer;
+}
