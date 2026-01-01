@@ -17,18 +17,18 @@ model User {
 
 model Product {
   id             String  @id @default(uuid())
-  name           String
+  name           String @unique
   avatarPublicId String?
 
-  price     Float
-  stock     Int
-  status    ProductStatus
+  price      Float
+  stock      Int
+  status     ProductStatus
+  categories Category[]
   //###FIX time issue later
-  createdAt DateTime      @default(now()) @db.Timestamptz(3)
-  updatedAt DateTime      @updatedAt @db.Timestamptz(3)
-
-  ownerId String
-  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  createdAt  DateTime      @default(now()) @db.Timestamptz(3)
+  updatedAt  DateTime      @updatedAt @db.Timestamptz(3)
+  ownerId    String
+  owner      User          @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 }
 
 enum ProductStatus {
@@ -36,8 +36,14 @@ enum ProductStatus {
   Published
 }
 
+model Category {
+  id       String    @id @default(uuid())
+  name     String @unique
+  products Product[]
+}
+
 // model OtpLimit {
-  
+
 // }
 
 // model SignupSession {
