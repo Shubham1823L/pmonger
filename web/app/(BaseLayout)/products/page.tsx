@@ -6,7 +6,6 @@ import { Check, Ellipsis, ListFilter, Plus, Search } from 'lucide-react'
 import fetchData from '@/lib/fetchData'
 import { type Product } from '@/types/product'
 import { redirect } from 'next/navigation'
-import clsx from 'clsx'
 
 
 export const metadata: Metadata = {
@@ -19,15 +18,13 @@ export const metadata: Metadata = {
 const Products = async () => {
     let data
     try {
-        const response = await fetchData<{ products: Product[] }>('get', 'http://localhost/api/products')
+        const response = await fetchData<{ products: Product[] }>('get', '/products')
         data = response.data.data
     } catch (error) {
-        console.error(error)
-        redirect('/')
+        redirect('/login')
     }
 
     const { products } = data
-
 
 
 

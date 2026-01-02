@@ -6,6 +6,7 @@ import * as argon2 from "argon2"
 import { generateAccessToken, generateRefreshToken, generateUint8Array } from "../utils/generateToken"
 import { jwtVerify } from 'jose';
 import env from '../config/env';
+import crypto from 'crypto'
 
 
 const SignupSchema = z.object({
@@ -53,7 +54,7 @@ export const signup: RequestHandler = async (req, res) => {
     return res.success(201, { user }, "Account created successfully")
 
 
-    const otp = Math.floor(Math.random() * (1e6 - 1e5) + 1e5)
+    const otp = crypto.randomInt(1e5, 1e6 - 1)
 
     //Generating otpHash
     const otpHash = await argon2.hash(otp.toString(), {
