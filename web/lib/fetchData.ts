@@ -1,9 +1,9 @@
 import { ApiError, ApiSuccess } from "@/types/api"
 import { cookies } from "next/headers"
+import { redirect } from "next/navigation"
 
 
 type Method = "get" | "post" | "put" | "patch" | "delete"
-const internalError = { status: 500, data: { success: false, code: "INTERNAL_ERROR", message: "Something went wrong!" } }
 
 const fetchData = async <T,>(method: Method, input: RequestInfo, bodyData?: object): Promise<ApiSuccess<T>> => {
     const baseUrl = process.env.NEXT_API_BASE_URL
@@ -14,17 +14,27 @@ const fetchData = async <T,>(method: Method, input: RequestInfo, bodyData?: obje
                 'Content-Type': 'application/json',
                 'Cookie': (await cookies()).toString()
             },
+            cache: 'no-store',
             body: JSON.stringify(bodyData)
         })
 
         const data = await response.json()
         const finalResponse = { status: response.status, data }
-        
-        if (!data.success) throw finalResponse
+
+
+        if (!data.success) {
+
+            if (data.code === "TOKEN_NOT_FOUND" || data.code === "ACCESS_TOKEN_EXPIRED") {
+                //Refresh access token
+                throw finalResponse
+
+            }
+            throw finalResponse
+        }
         return finalResponse
 
     } catch (error) {
-        throw internalError
+        throw error
     }
 
 

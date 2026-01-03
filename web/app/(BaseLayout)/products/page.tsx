@@ -21,8 +21,9 @@ const Products = async () => {
         const response = await fetchData<{ products: Product[] }>('get', '/products')
         data = response.data.data
     } catch (error) {
-        redirect('/login')
+        return <div>ERROR</div>
     }
+   
 
     const { products } = data
 
