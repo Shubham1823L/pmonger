@@ -22,15 +22,8 @@ const fetchData = async <T,>(method: Method, input: RequestInfo, bodyData?: obje
         const finalResponse = { status: response.status, data }
 
 
-        if (!data.success) {
+        if (!data.success) throw finalResponse
 
-            if (data.code === "TOKEN_NOT_FOUND" || data.code === "ACCESS_TOKEN_EXPIRED") {
-                //Refresh access token
-                throw finalResponse
-
-            }
-            throw finalResponse
-        }
         return finalResponse
 
     } catch (error) {

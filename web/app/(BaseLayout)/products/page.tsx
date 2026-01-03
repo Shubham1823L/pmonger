@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { Check, Ellipsis, ListFilter, Plus, Search } from 'lucide-react'
 import fetchData from '@/lib/fetchData'
 import { type Product } from '@/types/product'
-import { redirect } from 'next/navigation'
 
 
 export const metadata: Metadata = {
@@ -23,7 +22,7 @@ const Products = async () => {
     } catch (error) {
         return <div>ERROR</div>
     }
-   
+
 
     const { products } = data
 
@@ -85,7 +84,7 @@ const Products = async () => {
                     <div className={styles.tbody}>
                         {products.map(product => {
                             return (
-                                <TableRow key={product.id} name={product.name} avatarPublicId={product.avatarPublicId} price={product.price} stock={product.stock} status={product.status} />
+                                <TableRow id={product.id} key={product.id} name={product.name} avatarPublicId={product.avatarPublicId} price={product.price} stock={product.stock} status={product.status} />
                             )
                         })}
                     </div>
@@ -100,23 +99,23 @@ const Products = async () => {
 
 export default Products
 
-type TableRowProps = Omit<Product, "id" | "createdAt" | "updatedAt" | "ownerId">
+type TableRowProps = Omit<Product, "createdAt" | "updatedAt" | "ownerId">
 
-export const TableRow = ({ name, avatarPublicId, price, status, stock }: TableRowProps) => {
+export const TableRow = ({ name, avatarPublicId, price, status, stock, id }: TableRowProps) => {
     return (
         <div className={styles.tr}>
             <div className={styles.td}>
                 <input type="checkbox" className={styles.checkbox} />
                 <Check className={styles.checkmark} />
             </div>
-            <div className={styles.td}>
+            <Link href={`/products/${id}`} className={styles.td}>
                 {/* placeholder for productImage can be an svg or some general professional image either stored locally or rendered via cloudinary */}
                 <img className={styles.productImage} src="https://res.cloudinary.com/dvln1dlk4/image/upload/w_50/q_auto/f_auto/v1767196817/lushiroProject_uploads/1767196816477-900961976_oamtmt.jpg" alt="product-image" />
                 <span>
                     {name}
                 </span>
 
-            </div>
+            </Link>
             <div className={styles.td}>
                 <span>
                     Home Appliance, Electronics, goga singh pogga is here btw

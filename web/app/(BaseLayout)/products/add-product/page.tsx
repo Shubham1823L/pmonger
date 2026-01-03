@@ -17,7 +17,7 @@ const AddProduct = () => {
         <h1>Add Product</h1>
         <Link href='/products'>
           <ArrowLeft size={24} />
-          <span>Go back</span>
+          <span>All Products</span>
         </Link>
       </div>
 
