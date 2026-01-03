@@ -67,15 +67,36 @@ h6 {
     text-wrap: balance;
 }
 
+/* 9. Remove autofill colors */
+/* 
+input:-webkit-autofill,
+input:-webkit-autofill:focus-within,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:active {
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: white;
+    caret-color: white;
+
+} */
+/* 10. Remove arrow in number type input */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    /* Optional: Removes any default margin */
+}
+
 /* Global Variables */
 
 :root {
-    --neutral: hsl(0 0 3);
-    --neutral-lighter: hsl(0 0 5);
-    --neutral-500: hsl(0 0 9);
-    --neutral-hover: hsl(0 0 10);
-    --neutral-border: hsl(0 0 15);
+    --neutral: hsl(0 0 6);
+    --neutral-lighter: hsl(0 0 8);
+    --neutral-500: hsl(0 0 12);
+    --neutral-hover: hsl(0 0 13);
+    --neutral-border: hsl(0 0 18);
+    --neutral-border-lighter: hsl(0 0 33);
 
+    --add-product-input-box-bg: hsl(0 0 19);
 
     --font-neutral: hsl(0 0 95);
 
@@ -106,6 +127,19 @@ button,
 a:hover {
     cursor: pointer;
 }
-div[role='button']{
+
+div[role='button'] {
     cursor: pointer;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }

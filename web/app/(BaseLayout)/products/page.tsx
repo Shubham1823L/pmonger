@@ -33,7 +33,7 @@ const Products = async () => {
         <div className={styles.wrapper}>
             <div className={styles.header}>
                 <h1>Products</h1>
-                <Link href='../products/addProduct'>
+                <Link href='../products/add-product'>
                     <Plus size={24} />
                     <span>Add Product</span>
                 </Link>
