@@ -63,16 +63,7 @@ const Dashboard = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td><Link href={`/products`}>RGX Pro 112 Z</Link></td>
-              <td>Out of Stock</td>
-              <td>25d ago</td>
-            </tr>
-            <tr>
-              <td><Link href={`/products`}>RGX Pro 112 Z</Link></td>
-              <td>Published</td>
-              <td>2d ago</td>
-            </tr>
+         
             <tr>
               <td><Link href={`/products`}>RGX Pro 112 Z</Link></td>
               <td>Published</td>

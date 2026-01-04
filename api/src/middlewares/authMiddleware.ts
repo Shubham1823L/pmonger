@@ -20,7 +20,7 @@ const authMiddleware: RequestHandler = async (req, res, next) => {
         return res.fail(401, "UNAUTHORIZED", "Access Token verification failed")
     }
     const email = decoded.payload.email as string
-    const user = await prisma.user.findUnique({ where: { email } })
+    const user = await prisma.user.findUnique({ where: { email }, select: { email: true, id: true, fullName: true } })
     if (!user) {
         res.clearCookie('refreshToken', REFRESH_COOKIE_OPTIONS)
         return res.fail(401, "USER_NOT_FOUND", "Invalid Session")

@@ -6,6 +6,7 @@ import * as argon2 from "argon2"
 import { generateAccessToken, generateRefreshToken, generateUint8Array } from "../utils/generateToken"
 import { jwtVerify } from 'jose';
 import env from '../config/env';
+import crypto from 'crypto'
 
 
 const SignupSchema = z.object({
@@ -53,7 +54,7 @@ export const signup: RequestHandler = async (req, res) => {
     return res.success(201, { user }, "Account created successfully")
 
 
-    const otp = Math.floor(Math.random() * (1e6 - 1e5) + 1e5)
+    const otp = crypto.randomInt(1e5, 1e6 - 1)
 
     //Generating otpHash
     const otpHash = await argon2.hash(otp.toString(), {
@@ -126,4 +127,48 @@ export const refresh: RequestHandler = async (req, res) => {
     const accessToken = await generateAccessToken(email)
     res.cookie('accessToken', accessToken, ACCESS_COOKIE_OPTIONS)
     return res.success()
+}
+
+export const validateSession: RequestHandler = async (req, res, next) => {
+    const accessToken = req.cookies.accessToken
+
+    const useRefreshToken: RequestHandler = async (req, res) => {
+        const refreshToken = req.cookies.refreshToken
+        if (!refreshToken) return res.fail(401, "REFRESH_TOKEN_NOT_FOUND", "Session expired, please relogin")
+
+        let decoded
+        try {
+            decoded = await jwtVerify(refreshToken, generateUint8Array(env.REFRESH_TOKEN_SECRET))
+        } catch (error) {
+            return res.fail(401)
+        }
+        const email = decoded.payload.email as string
+        const user = await prisma.user.findUnique({ where: { email }, select: { email: true, id: true, fullName: true } })
+        if (!user) return res.fail(401)
+
+        const accessToken = await generateAccessToken(email)
+        res.cookie('accessToken', accessToken, ACCESS_COOKIE_OPTIONS)
+        return res.success()
+    }
+
+    if (!accessToken) return await useRefreshToken(req, res, next)
+
+    let decoded
+    try {
+        decoded = await jwtVerify(accessToken, generateUint8Array(env.ACCESS_TOKEN_SECRET))
+
+    } catch (error: any) {
+        if (error.code === "ERR_JWT_EXPIRED") return await useRefreshToken(req, res, next)
+
+        res.clearCookie('accessToken', ACCESS_COOKIE_OPTIONS)
+        res.clearCookie('refreshToken', REFRESH_COOKIE_OPTIONS)
+        return res.fail(401, "UNAUTHORIZED", "Access Token verification failed")
+    }
+    const email = decoded.payload.email as string
+    const user = await prisma.user.findUnique({ where: { email }, select: { email: true, id: true, fullName: true } })
+    if (!user) {
+        res.clearCookie('refreshToken', REFRESH_COOKIE_OPTIONS)
+        return res.fail(401)
+    }
+    res.success(200, { user })
 }

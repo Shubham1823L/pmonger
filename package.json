@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "web":"clear && cd web && npm run dev",
-    "api":"clear && cd api && npm run dev"
+    "web": "clear && cd web && npm run dev",
+    "api": "clear && cd api && npm run dev",
+    "db": "clear && cd api && npx prisma studio"
   },
   "keywords": [],
   "author": "",

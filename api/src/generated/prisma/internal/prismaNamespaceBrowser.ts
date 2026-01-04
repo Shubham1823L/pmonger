@@ -87,7 +87,10 @@ export const ProductScalarFieldEnum = {
   avatarPublicId: 'avatarPublicId',
   price: 'price',
   stock: 'stock',
+  minimumStock: 'minimumStock',
   status: 'status',
+  category: 'category',
+  description: 'description',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   ownerId: 'ownerId'

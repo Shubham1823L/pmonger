@@ -1,5 +1,4 @@
 .wrapper {
-    min-height: 100%;
 
     display: flex;
     flex-direction: column;
@@ -105,20 +104,19 @@
 .table {
     border-collapse: collapse;
     font-size: 15px;
-    height: 265px;
     border: 1px solid var(--neutral-border);
-    border-radius: 15px;
+    border-radius: 8px;
     overflow: hidden;
 
     thead {
         background-color: var(--neutral-border);
         border-bottom: 1px solid var(--neutral-border);
-
     }
 
 
     tr {
         border-bottom: 1px solid var(--neutral-border);
+        height: 40px;
     }
 
     th {

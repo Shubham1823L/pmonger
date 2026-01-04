@@ -26,7 +26,7 @@ app.use(responseHandler)
 
 app.use('/api/auth', authRoutes)
 app.use('/api/products', productRoutes)
-app.use('/api/uploadFile',uploadFileRoutes)
+app.use('/api/uploadFile', uploadFileRoutes)
 
 
 app.use(errorMiddleware)
