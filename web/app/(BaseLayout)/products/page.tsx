@@ -84,7 +84,7 @@ const Products = async () => {
                     <div className={styles.tbody}>
                         {products.map(product => {
                             return (
-                                <TableRow id={product.id} key={product.id} name={product.name} avatarPublicId={product.avatarPublicId} price={product.price} stock={product.stock} status={product.status} />
+                                <TableRow minimumStock={product.minimumStock} category={product.category} id={product.id} key={product.id} name={product.name} avatarPublicId={product.avatarPublicId} price={product.price} stock={product.stock} status={product.status} />
                             )
                         })}
                     </div>
@@ -99,9 +99,9 @@ const Products = async () => {
 
 export default Products
 
-type TableRowProps = Omit<Product, "createdAt" | "updatedAt" | "ownerId">
+type TableRowProps = Omit<Product, "createdAt" | "updatedAt" | "ownerId" | "description">
 
-export const TableRow = ({ name, avatarPublicId, price, status, stock, id }: TableRowProps) => {
+export const TableRow = ({ name, avatarPublicId, price, status, stock, id, minimumStock, category }: TableRowProps) => {
     return (
         <div className={styles.tr}>
             <div className={styles.td}>
@@ -118,11 +118,11 @@ export const TableRow = ({ name, avatarPublicId, price, status, stock, id }: Tab
             </Link>
             <div className={styles.td}>
                 <span>
-                    Home Appliance, Electronics, goga singh pogga is here btw
+                    {category}
                 </span>
             </div>
             <div className={styles.td}>
-                <span style={{ color: stock === 0 ? 'red' : '' }}>{stock > 0 ? stock : "Out of Stock"}</span>
+                <span style={{ color: stock === 0 ? 'red' : stock <= minimumStock ? 'yellow' : '' }}>{stock === 0 ? "Out of Stock" : stock <= minimumStock ? `${stock} (Low)` : stock}</span>
             </div>
             <div className={styles.td}>
                 <span>₹{price}</span>
