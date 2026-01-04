@@ -66,6 +66,7 @@
 .selectWrapper {
     position: relative;
 
+    
     >svg {
         position: absolute;
         right: 1em;

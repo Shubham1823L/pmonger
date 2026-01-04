@@ -4,6 +4,9 @@ import styles from '@/app/(BaseLayout)/products/add-product/addProduct.module.cs
 import { ChevronDown, CloudUpload, ImagePlus, IndianRupee, Save } from 'lucide-react'
 import saveProduct from './actions'
 import clsx from 'clsx'
+import categories from '@/lib/categoies'
+
+
 
 const Form = () => {
   const [data, action, isPending] = useActionState(saveProduct, undefined)
@@ -32,8 +35,7 @@ const Form = () => {
             <label htmlFor="category">Select Category</label>
             <div className={styles.selectWrapper}>
               <select name='category' id="category">
-                <option value="Appliance">Appliance</option>
-                <option value="Electronic">Electronic</option>
+                {categories.map(category => <option key={category} value={category}>{category}</option>)}
               </select>
               <ChevronDown />
             </div>
