@@ -3,8 +3,11 @@ import prisma from "../config/prisma";
 import * as z from 'zod'
 
 const ProductSchema = z.object({
-    name: z.string(),
-    avatarPublicId: z.string().optional(),
+    name: z.string().min(5),
+    avatarPublicId: z.string(),
+    description: z.string().min(5),
+    minimumStock: z.int().min(0).default(0),
+    category: z.string().min(5),
     stock: z.int().min(0),
     price: z.number().min(0),
     status: z.enum(["Draft", "Published"])

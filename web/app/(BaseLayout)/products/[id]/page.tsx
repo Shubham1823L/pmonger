@@ -75,7 +75,7 @@ const Product = async ({ params }: ProductProps) => {
 
                     <section>
                         <h3>About this item</h3>
-                        <p>Prodcut Description - Lorem ipsum dolor sit amet consectetur adipisicing elit. Eum, quos id dignissimos ex earum nihil pariatur harum, ab, iste aperiam temporibus perferendis sequi magni? Cumque repellat id fugit unde neque? Ullam harum placeat nulla ex. Doloremque voluptatem perferendis harum, quod sit reiciendis id architecto sequi, facere ullam, exercitationem quae impedit?</p>
+                        <p>{product.description}</p>
                     </section>
                     <LineBreak />
 

@@ -18,29 +18,24 @@ model User {
 model Product {
   id             String  @id @default(uuid())
   name           String  @unique
-  avatarPublicId String?
+  avatarPublicId String
 
-  price       Float
-  stock       Int
-  status      ProductStatus
-  categories  Category[]
-  description String        @default("This is a great product!")
+  price        Float
+  stock        Int
+  minimumStock Int           @default(0)
+  status       ProductStatus
+  category     String
+  description  String       
   //###FIX time issue later
-  createdAt   DateTime      @default(now()) @db.Timestamptz(3)
-  updatedAt   DateTime      @updatedAt @db.Timestamptz(3)
-  ownerId     String
-  owner       User          @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  createdAt    DateTime      @default(now()) @db.Timestamptz(3)
+  updatedAt    DateTime      @updatedAt @db.Timestamptz(3)
+  ownerId      String
+  owner        User          @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 }
 
 enum ProductStatus {
   Draft
   Published
-}
-
-model Category {
-  id       String    @id @default(uuid())
-  name     String    @unique
-  products Product[]
 }
 
 // model OtpLimit {
