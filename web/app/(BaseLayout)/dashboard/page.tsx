@@ -13,51 +13,57 @@ export const metadata: Metadata = {
 }
 
 const Dashboard = async () => {
-  const data1 = [
-    { value: 0, date: "2025-12-3" },
-    { value: 2, date: "2025-12-4" },
-    { value: 5, date: "2025-12-5" },
-    { value: 10, date: "2025-12-6" },
-    { value: 0, date: "2025-12-7" },
-    { value: 0, date: "2025-12-8" },
-    { value: 5, date: "2025-12-9" },
-    { value: 25, date: "2025-12-10" },
-    { value: 52, date: "2025-12-11" },
-    { value: 12, date: "2025-12-12" },
-  ]
 
-  const data2 = [
-    { value: 12, category: "Appliances" },
-    { value: 21, category: "Furniture" },
-    { value: 5, category: "Utensils" },
-    { value: 40, category: "Toys" },
-    { value: 10, category: "Sports" },
-    { value: 25, category: "Agronomy" }
-  ]
-
-  let latestProductsData
-  try {
-    const response = await fetchData<{ products: Product[] }>('get', `/products?page=1&limit=5`)
-    latestProductsData = response.data.data
-  } catch (error) {
-    return <div>ERROR</div>
+  type DashboardApiResponse = {
+    productsByCategory: {
+      _count: {
+        _all: number
+      },
+      category: string
+    }[],
+    productsByLatestUpdatedAt: Product[],
+    productsByNewlyAdded: {
+      date: string,
+      count: number
+    }[],
+    productsMetrics: {
+      total: number,
+      outOfStock: number,
+      draft: number,
+      categories:number
+    }
   }
-  const latestProducts = latestProductsData.products
+
+  let data
+  try {
+    const response = await fetchData<DashboardApiResponse>('get', '/dashboard')
+    data = response.data.data
+  } catch (error) {
+    return <div style={{
+      height: '100vh',
+      textAlign: 'center'
+
+    }}>500 INTERNAL ERROR</div>
+  }
+
+  const latestProducts = data.productsByLatestUpdatedAt
+  const data2 = data.productsByCategory.map(p => ({ value: p._count._all, category: p.category }))
+  const { productsByNewlyAdded, productsMetrics } = data
 
   return (
     <div className={styles.wrapper}>
 
       <div className={styles.topCards}>
 
-        <TopCard title='Total Products' metricCount={214} metricTrendingStat={-2.21} />
-        <TopCard title='Drafted Products' metricCount={12} metricTrendingStat={0.01} />
-        <TopCard title='Out of Stock' metricCount={5} metricTrendingStat={0.6} />
-        <TopCard title='Categories' metricCount={20} metricTrendingStat={0.01} />
+        <TopCard title='Total Products' metricCount={productsMetrics.total} metricTrendingStat={-2.21} />
+        <TopCard title='Drafted Products' metricCount={productsMetrics.draft} metricTrendingStat={0.01} />
+        <TopCard title='Out of Stock' metricCount={productsMetrics.outOfStock} metricTrendingStat={0.6} />
+        <TopCard title='Categories' metricCount={productsMetrics.categories} metricTrendingStat={0.01} />
 
       </div>
 
       <div className={styles.charts}>
-        <ProductsByDayChart data={data1} />
+        <ProductsByDayChart data={productsByNewlyAdded} />
         <ProductsByCategoryChart data={data2} />
       </div>
 

@@ -117,10 +117,14 @@ body {
     display: flex;
     max-width: 1920px;
     margin: auto;
+    max-height: 100vh;
+    overflow-y: hidden;
 }
 
 main {
     flex: 1;
+    max-height: 100%;
+    overflow-y: auto;
 }
 
 button,

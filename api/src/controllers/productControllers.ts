@@ -3,11 +3,11 @@ import prisma from "../config/prisma";
 import * as z from 'zod'
 
 const ProductSchema = z.object({
-    name: z.string().min(5),
+    name: z.string().min(1),
     avatarPublicId: z.string(),
     description: z.string().min(5),
     minimumStock: z.int().min(0).default(0),
-    category: z.string().min(5),
+    category: z.string().min(1),
     stock: z.int().min(0),
     price: z.number().min(0),
     status: z.enum(["Draft", "Published"])
@@ -32,24 +32,41 @@ export const publishNewProduct: RequestHandler = async (req, res) => {
 
 export const getProducts: RequestHandler = async (req, res) => {
     const user = req.user
-    if (!req.query.page || !req.query.limit) return res.fail(400, "INVALID_QUERY_PARAMS", "Page and/or limit were not defined")
-    const page = parseInt(req.query.page as string)
-    const limit = parseInt(req.query.limit as string)
+    const getDefaultParam = (param: unknown, defaultValue: string): string => {
+        if (typeof param === 'string') return param
+        return defaultValue
+    }
+    const getDefaultConditionalParam = (param: unknown) => {
+        if (param === null || param === undefined || typeof param === 'string') return param
+        return undefined
+    }
+
+    const page = parseInt(getDefaultParam(req.query.page, "1"))
+    const limit = parseInt(getDefaultParam(req.query.limit, "5"))
     const skip = (page - 1) * limit
+    const hasPrevPage = page > 1
+
+    const where: Record<string, any> = {
+        ownerId: user.id,
+    }
+
+    const category = getDefaultConditionalParam(req.query.category)
+    where.category = category
+
+
 
     const products = await prisma.product.findMany({
-        where: {
-            ownerId: user.id
-        },
+        where,
         orderBy: {
-            updatedAt: "desc"
+            'updatedAt': 'desc'
         },
         skip,
-        take: limit
-
+        take: limit + 1,
     })
 
-    return res.success(200, { products })
+    const slicedProducts = products.slice(0, limit) //won't overcut incase of less elements,unlike limit = -1
+    const hasNextPage = slicedProducts.length < products.length
+    return res.success(200, { products: slicedProducts, hasNextPage, hasPrevPage })
 }
 
 

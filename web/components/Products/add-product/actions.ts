@@ -6,13 +6,13 @@ import { cookies } from 'next/headers'
 import * as z from 'zod'
 
 const SaveProductSchema = z.object({
-    name: z.string().min(5),
+    name: z.string().min(1),
     description: z.string().min(5),
     price: z.coerce.number().min(0),
     stock: z.coerce.number().int().min(0),
     minimumStock: z.coerce.number().int().min(0).default(0),
     avatarPublicId: z.string(),
-    category: z.string().min(5),
+    category: z.string().min(1),
     status: z.enum(["Draft", "Published"])
 })
 const saveProduct = async (previousState: unknown, formData: FormData) => {
@@ -39,7 +39,7 @@ const saveProduct = async (previousState: unknown, formData: FormData) => {
     const rawData = Object.fromEntries(formData.entries())
     rawData.avatarPublicId = avatarPublicId
     const parsedData = SaveProductSchema.safeParse(rawData)
-    if (!parsedData.success) return console.log("ERROR ho gaya pehle hi")
+    if (!parsedData.success) return console.log("ERROR ho gaya pehle hi",parsedData.error)
 
     let data
     try {
