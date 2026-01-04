@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 const Products = async () => {
     let data
     try {
-        const response = await fetchData<{ products: Product[] }>('get', '/products')
+        const response = await fetchData<{ products: Product[] }>('get', `/products?page=1&limit=8`)
         data = response.data.data
     } catch (error) {
         return <div>ERROR</div>

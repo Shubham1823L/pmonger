@@ -32,11 +32,21 @@ export const publishNewProduct: RequestHandler = async (req, res) => {
 
 export const getProducts: RequestHandler = async (req, res) => {
     const user = req.user
+    if (!req.query.page || !req.query.limit) return res.fail(400, "INVALID_QUERY_PARAMS", "Page and/or limit were not defined")
+    const page = parseInt(req.query.page as string)
+    const limit = parseInt(req.query.limit as string)
+    const skip = (page - 1) * limit
 
     const products = await prisma.product.findMany({
         where: {
             ownerId: user.id
-        }
+        },
+        orderBy: {
+            updatedAt: "desc"
+        },
+        skip,
+        take: limit
+
     })
 
     return res.success(200, { products })

@@ -5,12 +5,14 @@ import TopCard from '@/components/Dashboard/TopCard'
 import ProductsByDayChart from '@/components/Dashboard/charts/ProductsByDayChart'
 import ProductsByCategoryChart from '@/components/Dashboard/charts/ProductsByCategoryChart'
 import Link from 'next/link'
+import fetchData from '@/lib/fetchData'
+import { type Product } from '@/types/product'
 
 export const metadata: Metadata = {
   title: "Dashboard - PMonger"
 }
 
-const Dashboard = () => {
+const Dashboard = async () => {
   const data1 = [
     { value: 0, date: "2025-12-3" },
     { value: 2, date: "2025-12-4" },
@@ -32,6 +34,16 @@ const Dashboard = () => {
     { value: 10, category: "Sports" },
     { value: 25, category: "Agronomy" }
   ]
+
+  let latestProductsData
+  try {
+    const response = await fetchData<{ products: Product[] }>('get', `/products?page=1&limit=5`)
+    latestProductsData = response.data.data
+  } catch (error) {
+    return <div>ERROR</div>
+  }
+  const latestProducts = latestProductsData.products
+
   return (
     <div className={styles.wrapper}>
 
@@ -54,33 +66,30 @@ const Dashboard = () => {
           <span>Recently Updated</span>
           <Link href={'/products'}>View all products</Link>
         </div>
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th>Product</th>
-              <th>Status</th>
-              <th>Updated</th>
-            </tr>
-          </thead>
-          <tbody>
-         
-            <tr>
-              <td><Link href={`/products`}>RGX Pro 112 Z</Link></td>
-              <td>Published</td>
-              <td>2d ago</td>
-            </tr>
-            <tr>
-              <td><Link href={`/products`}>RGX Pro 112 Z</Link></td>
-              <td>Published</td>
-              <td>2d ago</td>
-            </tr>
-            <tr>
-              <td><Link href={`/products`}>RGX Pro 112 Z</Link></td>
-              <td>Published</td>
-              <td>2d ago</td>
-            </tr>
-          </tbody>
-        </table>
+        <div className={styles.table}>
+          <div className={styles.thead}>
+            <div>Product</div>
+            <div>Status</div>
+            <div>Updated</div>
+          </div>
+          <div className={styles.tbody}>
+            {
+              latestProducts.map(product => {
+                const updatedDate = new Date(product.updatedAt).toLocaleDateString()
+                const updateTime = new Date(product.updatedAt).toLocaleTimeString()
+                return (
+                  <div className={styles.latestProductRow} key={product.id}>
+                    <div><Link href={`/products/${product.id}`}>{product.name}</Link></div>
+                    <div>{product.status}</div>
+                    <div>{updatedDate} {updateTime}</div>
+                  </div>
+                )
+              })
+            }
+
+
+          </div>
+        </div>
       </div>
 
 

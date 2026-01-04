@@ -91,47 +91,79 @@
         color: var(--primary-200);
         transition: all .15s linear;
 
-        &:hover{
+        &:hover {
             text-decoration: underline;
             color: var(--primary-300);
         }
-        &:active{
+
+        &:active {
             color: var(--primary-200);
         }
     }
 }
 
 .table {
-    border-collapse: collapse;
     font-size: 15px;
     border: 1px solid var(--neutral-border);
     border-radius: 8px;
     overflow: hidden;
 
-    thead {
-        background-color: var(--neutral-border);
-        border-bottom: 1px solid var(--neutral-border);
-    }
+    display: flex;
+    flex-direction: column;
+
+}
+
+.thead {
+    background-color: var(--neutral-border);
+    border-bottom: 1px solid var(--neutral-border-lighter);
+    display: flex;
+    text-align: center;
 
 
-    tr {
-        border-bottom: 1px solid var(--neutral-border);
-        height: 40px;
-    }
-
-    th {
-        padding: .5em;
-    }
-
-
-    td {
+    >div {
         padding: .5em 1em;
-        text-align: center;
 
-        a:hover{
-            color: var(--primary-200);
+        &:first-child {
+            width: 60%;
+        }
+
+        &:not(:first-child) {
+            flex: 1;
         }
     }
 
+}
+
+.tr {
+    border-bottom: 1px solid var(--neutral-border);
+    height: 40px;
+}
+
+
+
+.latestProductRow {
+    text-align: center;
+    display: flex;
+    align-items: center;
+
+    &:not(:last-child){
+        border-bottom: 1px solid var(--neutral-border-lighter);
+    }
+
+    >div {
+        padding: .5em 1em;
+
+        &:first-child {
+            width: 60%;
+        }
+
+        &:not(:first-child) {
+            flex: 1;
+        }
+    }
+
+    a:hover {
+        color: var(--primary-200);
+    }
 
 }
