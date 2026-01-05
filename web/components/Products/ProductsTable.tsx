@@ -5,6 +5,9 @@ import { Check, Ellipsis, ListFilter, Search, Trash2, X } from 'lucide-react'
 import Link from 'next/link'
 import { type Product } from '@/types/product'
 import apiClient from '@/lib/apiClient'
+import { getImgURL } from '@/lib/cloudinary'
+import Image from 'next/image'
+
 
 type ProductsTableProps = {
     products: Product[]
@@ -53,6 +56,8 @@ const ProductsTable = ({ products }: ProductsTableProps) => {
         }
 
     }
+
+
 
 
 
@@ -124,6 +129,8 @@ type TableRowProps = Omit<Product, "createdAt" | "updatedAt" | "ownerId" | "desc
 }
 
 const TableRow = ({ name, avatarPublicId, price, status, stock, id, minimumStock, category, onChange, checked }: TableRowProps) => {
+
+    const productAvatarURL = getImgURL(avatarPublicId, 300)
     return (
         <div className={styles.tr}>
             <div className={styles.td}>
@@ -132,7 +139,7 @@ const TableRow = ({ name, avatarPublicId, price, status, stock, id, minimumStock
             </div>
             <Link href={`/products/${id}`} className={styles.td}>
                 {/* placeholder for productImage can be an svg or some general professional image either stored locally or rendered via cloudinary */}
-                <img className={styles.productImage} src="https://res.cloudinary.com/dvln1dlk4/image/upload/w_50/q_auto/f_auto/v1767196817/lushiroProject_uploads/1767196816477-900961976_oamtmt.jpg" alt="product-image" />
+                <img  className={styles.productImage} src={productAvatarURL} alt="product-image" />
                 <span>
                     {name}
                 </span>

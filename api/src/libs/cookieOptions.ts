@@ -11,7 +11,7 @@ export const ACCESS_COOKIE_OPTIONS: CookieOptions = {
     httpOnly: true,
     secure: true,
     sameSite: 'lax',
-    maxAge: 15 * 60 * 1000
+    maxAge: 60 * 60 * 1000
 }
 export const OAUTH_COOKIE_OPTIONS: CookieOptions = {
     httpOnly: true,
