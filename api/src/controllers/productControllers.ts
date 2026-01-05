@@ -111,3 +111,27 @@ export const deleteProduct: RequestHandler = async (req, res) => {
 
     return res.sendStatus(204)
 }
+
+
+
+export const deleteProducts: RequestHandler = async (req, res) => {
+    const user = req.user
+
+    //Check validity of data format
+    const DeleteProductsSchema = z.object({
+        productIds: z.array(z.string())
+    })
+    const parsedData = DeleteProductsSchema.safeParse(req.body)
+    if (!parsedData.success) return res.fail(400, "BAD_REQUEST", "Invalid data")
+    const { productIds } = parsedData.data
+
+    //Delete only those products which are owned, and return the count
+    const { count } = await prisma.product.deleteMany({
+        where: {
+            ownerId: user.id,
+            id: { in: productIds }
+        }
+    })
+
+    return res.success(200, { requested: productIds.length, deleted: count }, `Successfully deleted ${count}/${productIds.length} entries`)
+}
