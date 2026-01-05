@@ -1,5 +1,5 @@
 .wrapper {
-    height: 100%;
+    height: stretch;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -50,12 +50,12 @@
 .searchAndFiltersWrapper {
     display: flex;
     align-items: center;
+    gap: .75rem;
 
     >* {
         display: flex;
         align-items: center;
         gap: .5rem;
-        padding: .3em .9em;
         border-radius: 8px;
         border: 1px solid var(--neutral-border);
     }
@@ -63,6 +63,18 @@
     >:nth-child(2) {
         margin-left: auto;
     }
+
+}
+
+.searchWrapper,
+.filter {
+    padding: .3em .9em;
+}
+
+.unselectAll,
+.deleteSelected {
+    padding: .3em;
+    visibility: hidden;
 
 }
 
@@ -77,7 +89,7 @@
 
 .table {
     border-radius: 8px;
-    overflow: hidden;
+    overflow: hidden auto;
 }
 
 .thead {
@@ -96,6 +108,11 @@
     background-color: hsl(0, 100%, 60%);
 }
 
+.tbody:has(.checkbox:checked) {
+    .actionsBtn {
+        display: none;
+    }
+}
 
 
 .td {
