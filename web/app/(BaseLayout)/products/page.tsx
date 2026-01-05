@@ -9,7 +9,7 @@ import ProductsTable from '@/components/Products/ProductsTable'
 
 
 export const metadata: Metadata = {
-    title: "Products - PMonger",
+    title: "Products - P Monger",
     description: "View and manage your products"
 }
 

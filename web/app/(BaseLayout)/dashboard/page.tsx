@@ -9,7 +9,7 @@ import fetchData from '@/lib/fetchData'
 import { type Product } from '@/types/product'
 
 export const metadata: Metadata = {
-  title: "Dashboard - PMonger"
+  title: "Dashboard - P Monger"
 }
 
 const Dashboard = async () => {
