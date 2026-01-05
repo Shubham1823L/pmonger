@@ -11,7 +11,7 @@ export const generateAccessToken: GenerateToken = async (email) => {
         const accessToken = await new SignJWT({ email })
             .setProtectedHeader({ alg: "HS256" })
             .setIssuedAt()
-            .setExpirationTime('15 minutes')
+            .setExpirationTime('60 minutes')
             .sign(generateUint8Array(env.ACCESS_TOKEN_SECRET))
         return accessToken
     } catch (error) {

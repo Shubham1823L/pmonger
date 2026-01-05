@@ -1,9 +1,10 @@
 .wrapper {
-
+    height: stretch;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
 
+   
 }
 
 .topCards {
@@ -125,10 +126,12 @@
 
         &:first-child {
             width: 60%;
+
         }
 
         &:not(:first-child) {
             flex: 1;
+            text-align: left;
         }
     }
 
@@ -146,19 +149,35 @@
     display: flex;
     align-items: center;
 
-    &:not(:last-child){
+    &:not(:last-child) {
         border-bottom: 1px solid var(--neutral-border-lighter);
     }
 
     >div {
-        padding: .5em 1em;
+        padding: 1em 1em;
 
         &:first-child {
             width: 60%;
+
+            >a {
+                text-align: left;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 1;
+                line-clamp: 1;
+                overflow-y: hidden;
+                overflow-x: scroll;
+
+                &::-webkit-scrollbar {
+                    display: none;
+                }
+            }
         }
 
         &:not(:first-child) {
             flex: 1;
+            text-align: left;
+
         }
     }
 

@@ -100,9 +100,12 @@ input::-webkit-inner-spin-button {
 
     --font-neutral: hsl(0 0 95);
 
-    --primary-400: hsl(248, 98%, 61%);
+    /* --primary-400: hsl(248, 98%, 61%);
     --primary-300: hsl(248, 98%, 67%);
-    --primary-200: hsl(248, 98%, 81%);
+    --primary-200: hsl(248, 98%, 81%); */
+    --primary-400: hsl(233, 94%, 63%);
+    --primary-300: hsl(233, 94%, 68%);
+    --primary-200: hsl(233, 94%, 73%);
 
     --clr-green-400: hsl(101, 78%, 41%);
     --clr-green-500: hsl(158, 100%, 30%);
@@ -166,9 +169,11 @@ div[role='button'] {
 .sonner-desc {
     color: var(--font-neutral) !important;
 }
-.sonner-success{
+
+.sonner-success {
     color: var(--clr-green-500) !important;
 }
-.sonner-error{
+
+.sonner-error {
     color: var(--clr-red-400) !important;
 }
