@@ -114,6 +114,11 @@
     }
 }
 
+.tableWrapper:has(.checkbox:checked){
+    .unselectAll,.deleteSelected{
+        visibility: visible;
+    }
+}
 
 .td {
     padding: 1em;

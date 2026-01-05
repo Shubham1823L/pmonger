@@ -4,6 +4,7 @@ import styles from '@/app/(BaseLayout)/products/products.module.css'
 import { Check, Ellipsis, ListFilter, Search, Trash2, X } from 'lucide-react'
 import Link from 'next/link'
 import { type Product } from '@/types/product'
+import apiClient from '@/lib/apiClient'
 
 type ProductsTableProps = {
     products: Product[]
@@ -34,6 +35,26 @@ const ProductsTable = ({ products }: ProductsTableProps) => {
         })
     }
 
+    const handleUnselectAll = () => {
+        setSelectedIds(new Set<string>())
+        setIsChecked(false)
+    }
+    const handleDeleteSelected = async () => {
+        const productIds = Array.from(selectedIds)
+
+        let data
+        try {
+            const response = await apiClient<{ requested: number, deleted: number }>('delete', '/products', { productIds })
+            data = response.data.data
+            window.location.reload()
+
+        } catch (error) {
+            return console.error(error, "Something went wrong")
+        }
+
+    }
+
+
 
     return (
         <div className={styles.tableWrapper}>
@@ -42,12 +63,12 @@ const ProductsTable = ({ products }: ProductsTableProps) => {
                     <input placeholder='Search' className={styles.search} type="text" />
                     <Search />
                 </div>
-                <div role='button' className={styles.unselectAll}>
+                <button onClick={handleUnselectAll} role='button' className={styles.unselectAll}>
                     <X />
-                </div>
-                <div role='button' className={styles.deleteSelected}>
+                </button>
+                <button onClick={handleDeleteSelected} role='button' className={styles.deleteSelected}>
                     <Trash2 />
-                </div>
+                </button>
                 <div role='button' className={styles.filter}>
                     <ListFilter /> Filter
                 </div>

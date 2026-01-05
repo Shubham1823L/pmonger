@@ -13,7 +13,7 @@ export default async function proxy(req: NextRequest) {
     const isProtectedRoute = protectedRoutes.includes(pathname)
     const isAntiProtectedRoute = antiProtectedRoutes.includes(pathname)
 
-    const baseURL = process.env.NEXT_API_BASE_URL
+    const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL
     const accessToken = req.cookies.get('accessToken')
     if (accessToken) {
         if (!accessToken && isProtectedRoute) NextResponse.redirect(new URL('/login', req.nextUrl))
