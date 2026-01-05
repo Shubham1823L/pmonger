@@ -1,15 +1,16 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import styles from '@/app/(BaseLayout)/products/add-product/addProduct.module.css'
-import { ChevronDown, CloudUpload, ImagePlus, IndianRupee, Save } from 'lucide-react'
+import { Check, CheckCircle, ChevronDown, Circle, CircleCheck, CloudUpload, ImagePlus, IndianRupee, Save } from 'lucide-react'
 import clsx from 'clsx'
 import categories from '@/lib/categoies'
 import apiClient from '@/lib/apiClient'
 import xiorFetch from '@/lib/xiorApi'
 import { type Product } from '@/types/product'
+import { toast } from 'sonner'
 
 
 // type FormFields = {
@@ -42,7 +43,7 @@ const FormSchema = z.object({
 type FormFields = z.infer<typeof FormSchema>
 
 const Form = () => {
-  const { register, handleSubmit, setError, formState: { errors, isSubmitting, isSubmitSuccessful } } = useForm<FormFields>({ resolver: zodResolver(FormSchema) })
+  const { register, handleSubmit, setError, formState: { errors, isSubmitting, isSubmitted } } = useForm<FormFields>({ resolver: zodResolver(FormSchema) })
   const [tempURL, setTempURL] = useState<string>()
 
   const [file, setFile] = useState<File>()
@@ -59,6 +60,10 @@ const Form = () => {
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     if (fileError || !file) return setFileError('Image cannot be empty')
 
+    toast.loading("Uploading image...", {
+      id: "api"
+    })
+
     const imgFormData = new FormData()
     imgFormData.append('productAvatar', file)
 
@@ -67,8 +72,17 @@ const Form = () => {
       const imgRes = await xiorFetch.post('/uploadFile', imgFormData)
       imgData = imgRes.data.data
     } catch (error) {
-      return setError('root', { message: "Something went wrong, image could not be uploaded" })
+      toast.dismiss('api')
+      return toast.error("Something went wrong", {
+        id: 'api',
+        description: "Image upload failed"
+      })
     }
+
+    toast.dismiss('api')
+    toast.loading("Saving Product...", {
+      id: "api"
+    })
 
     const avatarPublicId = imgData.publicId as string
 
@@ -79,12 +93,26 @@ const Form = () => {
       const response = await apiClient<{ product: Product }>('post', '/products', { ...data, avatarPublicId })
       productData = response.data.data.product
     } catch (error) {
-      return setError('root', { message: "Something went wrong, product could not be saved" })
+      toast.dismiss('api')
+      return toast.error("Something went wrong", {
+        id: 'api',
+        description: "Product could not be saved"
+      })
     }
 
-    console.log(productData)
+    const succuessMessage = data.status === 'Draft' ? "Draft Successful" : "Published"
+
+    toast.dismiss('api')
+    toast.success(succuessMessage, {
+      description: "Product added successfully !",
+      id: "api"
+    })
 
   }
+
+  useEffect(() => {
+    setTempURL('')
+  }, [isSubmitted])
 
 
   return (

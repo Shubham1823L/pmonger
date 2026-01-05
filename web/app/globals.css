@@ -104,6 +104,20 @@ input::-webkit-inner-spin-button {
     --primary-300: hsl(248, 98%, 67%);
     --primary-200: hsl(248, 98%, 81%);
 
+    --clr-green-400: hsl(101, 78%, 41%);
+    --clr-green-500: hsl(158, 100%, 30%);
+    --clr-green-600: hsl(158, 100%, 20%);
+
+    --clr-red-400: #FF2C2C;
+    --clr-red-500: #E53935;
+    --clr-red-600: #FF2C2C;
+
+    /* Sonner */
+
+
+
+
+
 
 
 
@@ -146,4 +160,15 @@ div[role='button'] {
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
+}
+
+
+.sonner-desc {
+    color: var(--font-neutral) !important;
+}
+.sonner-success{
+    color: var(--clr-green-500) !important;
+}
+.sonner-error{
+    color: var(--clr-red-400) !important;
 }

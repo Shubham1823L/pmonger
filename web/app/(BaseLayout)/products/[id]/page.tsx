@@ -17,7 +17,7 @@ export const generateMetadata = async ({ params }: generateMetadataProps): Promi
     const { id } = await params
     let data
     try {
-        const repsonse = await fetchData<{ product: Product }>('get', `/products/${id}`)
+        const repsonse = await fetchData<{ product: Product }>('get', `/products/${id}?page=1&limit=10`)
         data = repsonse.data.data
     } catch (error) {
         console.log("Could not fetch product data for page metadata")
