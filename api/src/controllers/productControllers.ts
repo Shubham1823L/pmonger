@@ -6,7 +6,7 @@ const ProductSchema = z.object({
     name: z.string().min(1),
     avatarPublicId: z.string(),
     description: z.string().min(5),
-    minimumStock: z.int().min(0).default(0),
+    minimumStock: z.int().min(0),
     category: z.string().min(1),
     stock: z.int().min(0),
     price: z.number().min(0),
@@ -71,16 +71,18 @@ export const getProducts: RequestHandler = async (req, res) => {
 
 
 export const getProduct: RequestHandler = async (req, res) => {
-    const product = req.body.product
+    const product = req.body.attachedProduct
     return res.success(200, { product })
 }
 
 export const updateProduct: RequestHandler = async (req, res) => {
     const { productId } = req.params
+
     const parsedData = ProductSchema.partial().safeParse(req.body)
     if (!parsedData.success || Object.keys(parsedData.data).length === 0) return res.fail(400, "BAD_REQUEST", "Invalid details")
 
     const productData = parsedData.data
+
 
     const updatedProduct = await prisma.product.update({
         where: { id: productId },

@@ -29,7 +29,7 @@ const Form = ({ product, onSubmit, handleFileChange, tempURL, fileError }: FormP
       description: product.description,
       category: product.category,
       price: product.price,
-      status: product.status
+
     } : undefined
   })
 
@@ -99,6 +99,7 @@ const Form = ({ product, onSubmit, handleFileChange, tempURL, fileError }: FormP
             </div>
             <div className={styles.imagePreview}>
               {
+              // eslint-disable-next-line @next/next/no-img-element
                 tempURL && <img src={tempURL} alt="product-image-preview" />
               }
             </div>

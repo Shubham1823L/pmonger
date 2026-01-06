@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Form from './Form'
 import { toast } from 'sonner'
 import { SubmitHandler } from 'react-hook-form'
@@ -16,8 +16,14 @@ type EditProductFormProps = {
 
 
 const EditProductForm = ({ product }: EditProductFormProps) => {
+    useEffect(() => {
+        setIsMounted(true)
+        //###LATE understand why setting initial value in useState declaration disrupts hydration
+        setTempURL(getImgURL(product.avatarPublicId, 400))
+    }, [])
 
-    const [tempURL, setTempURL] = useState<string>(getImgURL(product.avatarPublicId, 400))
+    const [isMounted, setIsMounted] = useState(false)
+    const [tempURL, setTempURL] = useState<string>('')
     const [file, setFile] = useState<File>()
     const [fileError, setFileError] = useState('')
 
@@ -33,6 +39,7 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
         //We should not throw error if no img is selected, but update image if any image is selected
         //Incase the image is updated, we do not need to pass the publicId , as it will remain the same
+        console.log(data)
         if (file) {
             toast.loading("Uploading image...", {
                 id: 'editProduct'
@@ -55,9 +62,10 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
 
 
 
-        const { id, avatarPublicId, createdAt, updatedAt, ownerId, ...changableData } = product
-        const dataIsSame = isEqual(data, changableData)
 
+        const { id, avatarPublicId, createdAt, updatedAt, ownerId, ...originalData } = product
+        const dataIsSame = isEqual(data, originalData)
+        console.log(dataIsSame)
         if (dataIsSame && file) return toast.success("Successful update", {
             description: "Image updated successfully",
             id: "editProduct"
@@ -69,15 +77,15 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
 
 
         for (const key in data) {
-            if (data[key] == changableData[key]) delete changableData[key]
+            if (data[key] == originalData[key]) delete data[key]
         }
 
         toast.loading("Saving Product...", {
             id: "editProduct"
         })
-
+        console.log('updatable data=>', data)
         try {
-            await apiClient<{ product: Product }>('patch', `/products/${product.id}`, changableData)
+            await apiClient<{ product: Product }>('patch', `/products/${product.id}`, data)
         } catch (error) {
             toast.dismiss('editProduct')
             return toast.error("Something went wrong", {
@@ -85,7 +93,6 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
                 description: "Product could not be saved"
             })
         }
-
         const succuessMessage = data.status === 'Draft' ? "Draft Successful" : "Published"
         toast.dismiss('editProduct')
         toast.success(succuessMessage, {

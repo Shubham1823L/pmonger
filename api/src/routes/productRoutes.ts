@@ -30,7 +30,7 @@ router.param('productId', async (req, res, next, productId) => {
         const product = await prisma.product.findUnique({ where: { id: productId } })
         //For security purposes , we do not forward 403 incase of wrong ownership
         if (!product || product.ownerId != user.id) return res.fail(404, "NOT_FOUND", "Product does not exist")
-        req.body = { product }
+        req.body = { ...req.body, attachedProduct: product }
         next()
     } catch (error) {
         next(error)
