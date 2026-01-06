@@ -6,7 +6,6 @@ import Link from 'next/link'
 import { type Product } from '@/types/product'
 import apiClient from '@/lib/apiClient'
 import { getImgURL } from '@/lib/cloudinary'
-import Image from 'next/image'
 
 
 type ProductsTableProps = {
@@ -131,6 +130,7 @@ type TableRowProps = Omit<Product, "createdAt" | "updatedAt" | "ownerId" | "desc
 const TableRow = ({ name, avatarPublicId, price, status, stock, id, minimumStock, category, onChange, checked }: TableRowProps) => {
 
     const productAvatarURL = getImgURL(avatarPublicId, 300)
+
     return (
         <div className={styles.tr}>
             <div className={styles.td}>

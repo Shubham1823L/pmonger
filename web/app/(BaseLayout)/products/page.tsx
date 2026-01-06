@@ -1,5 +1,4 @@
 import { Metadata } from 'next'
-import React from 'react'
 import styles from './products.module.css'
 import Link from 'next/link'
 import { Plus } from 'lucide-react'

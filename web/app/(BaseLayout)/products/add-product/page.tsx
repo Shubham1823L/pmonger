@@ -1,9 +1,8 @@
 import { Metadata } from 'next'
-import React from 'react'
 import productsStyles from '../products.module.css'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
-import Form from '@/components/Products/add-product/Form'
+import AddProductForm from '@/components/Products/AddProductForm'
 
 export const metadata: Metadata = {
   title: "Add Product - P Monger",
@@ -21,7 +20,7 @@ const AddProduct = () => {
         </Link>
       </div>
 
-      <Form />
+      <AddProductForm />
 
     </div>
   )
