@@ -29,6 +29,7 @@ const Form = ({ product, onSubmit, handleFileChange, tempURL, fileError }: FormP
       description: product.description,
       category: product.category,
       price: product.price,
+      status: product.status
 
     } : undefined
   })
@@ -49,16 +50,29 @@ const Form = ({ product, onSubmit, handleFileChange, tempURL, fileError }: FormP
             {errors.description && <div className={styles.errorMsg}>{errors.description.message}</div>}
           </div>
         </FieldBase>
-        <FieldBase title='Category'>
+        <FieldBase title='Category and Status'>
           <div className={styles.category}>
-            <label htmlFor="category">Select Category</label>
-            <div className={styles.selectWrapper}>
-              <select {...register('category')} name='category' id="category">
-                {categories.map(category => <option key={category} value={category}>{category}</option>)}
-              </select>
-              <ChevronDown />
+            <div>
+              <label htmlFor="category">Select Category</label>
+              <div className={styles.selectWrapper}>
+                <select {...register('category')} name='category' id="category">
+                  {categories.map(category => <option key={category} value={category}>{category}</option>)}
+                </select>
+                <ChevronDown />
+              </div>
+              {errors.category && <div className={styles.errorMsg}>{errors.category.message}</div>}
             </div>
-            {errors.category && <div className={styles.errorMsg}>{errors.category.message}</div>}
+            <div>
+              <label htmlFor="status">Choose Status</label>
+              <div className={styles.selectWrapper}>
+                <select {...register('status')} name='status' id="status">
+                  <option value="Draft">Draft</option>
+                  <option value="Published">Publish</option>
+                </select>
+                <ChevronDown />
+              </div>
+              {errors.category && <div className={styles.errorMsg}>{errors.category.message}</div>}
+            </div>
 
           </div>
         </FieldBase>
@@ -99,7 +113,7 @@ const Form = ({ product, onSubmit, handleFileChange, tempURL, fileError }: FormP
             </div>
             <div className={styles.imagePreview}>
               {
-              // eslint-disable-next-line @next/next/no-img-element
+                // eslint-disable-next-line @next/next/no-img-element
                 tempURL && <img src={tempURL} alt="product-image-preview" />
               }
             </div>
@@ -107,11 +121,14 @@ const Form = ({ product, onSubmit, handleFileChange, tempURL, fileError }: FormP
           {fileError && <div className={styles.errorMsg}>{fileError}</div>}
         </FieldBase>
         <div className={styles.submitBtns}>
-          <button disabled={isSubmitting} {...register('status')} name='status' value='Draft' className={clsx(styles.draftBtn, isSubmitting && styles.disabledBtn)}>
+          {/* <button disabled={isSubmitting} {...register('status')} name='status' value='Draft' className={clsx(styles.draftBtn, isSubmitting && styles.disabledBtn)}>
             <Save /> Save as Draft
           </button>
           <button disabled={isSubmitting} {...register('status')} name='status' value='Published' className={clsx(styles.publishBtn, isSubmitting && styles.disabledBtn)}>
             <CloudUpload />  Publish
+          </button> */}
+          <button disabled={isSubmitting} className={clsx(product ? styles.draftBtn : styles.publishBtn, isSubmitting && styles.disabledBtn)}>
+            {product ? <> <Save /> Save Changes </> : <><CloudUpload />  Add Product</>}
           </button>
         </div>
         {errors.root && <div className={styles.errorMsg}>{errors.root.message}</div>}

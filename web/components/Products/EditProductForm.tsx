@@ -16,13 +16,8 @@ type EditProductFormProps = {
 
 
 const EditProductForm = ({ product }: EditProductFormProps) => {
-    useEffect(() => {
-        setIsMounted(true)
-        //###LATE understand why setting initial value in useState declaration disrupts hydration
-        setTempURL(getImgURL(product.avatarPublicId, 400))
-    }, [])
 
-    const [isMounted, setIsMounted] = useState(false)
+
     const [tempURL, setTempURL] = useState<string>('')
     const [file, setFile] = useState<File>()
     const [fileError, setFileError] = useState('')
@@ -39,7 +34,6 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
         //We should not throw error if no img is selected, but update image if any image is selected
         //Incase the image is updated, we do not need to pass the publicId , as it will remain the same
-        console.log(data)
         if (file) {
             toast.loading("Uploading image...", {
                 id: 'editProduct'
@@ -50,9 +44,8 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
             imgFormData.append('avatarPublicId', product.avatarPublicId)
             try {
                 await xiorFetch.post('/uploadFile', imgFormData)
-                toast.dismiss('editProduct')
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
             } catch (error) {
-                toast.dismiss('editProduct')
                 return toast.error("Something went wrong", {
                     id: 'editProduct',
                     description: "Image upload failed"
@@ -63,9 +56,9 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
 
 
 
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { id, avatarPublicId, createdAt, updatedAt, ownerId, ...originalData } = product
         const dataIsSame = isEqual(data, originalData)
-        console.log(dataIsSame)
         if (dataIsSame && file) return toast.success("Successful update", {
             description: "Image updated successfully",
             id: "editProduct"
@@ -77,32 +70,40 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
 
 
         for (const key in data) {
+            // ###LEARN THIS LATER
             if (data[key] == originalData[key]) delete data[key]
         }
 
         toast.loading("Saving Product...", {
-            id: "editProduct"
+            id: "editProduct",
         })
-        console.log('updatable data=>', data)
         try {
             await apiClient<{ product: Product }>('patch', `/products/${product.id}`, data)
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
-            toast.dismiss('editProduct')
             return toast.error("Something went wrong", {
                 id: 'editProduct',
                 description: "Product could not be saved"
             })
         }
-        const succuessMessage = data.status === 'Draft' ? "Draft Successful" : "Published"
-        toast.dismiss('editProduct')
-        toast.success(succuessMessage, {
+
+        toast.success("Successful", {
             description: "Product updated successfully !",
-            id: "editProduct"
+            id: "editProduct",
+            duration: 5000,
         })
 
 
     }
 
+    useEffect(() => {
+        //###LATE understand why setting initial value in useState declaration disrupts hydration
+        (async () => {
+            setTempURL(getImgURL(product.avatarPublicId, 400))
+        })()
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
         <Form onSubmit={onSubmit} handleFileChange={handleFileChange} tempURL={tempURL} fileError={fileError} product={product} />
