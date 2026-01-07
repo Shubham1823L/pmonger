@@ -1,37 +1,32 @@
 'use client'
-
-import React, { useState } from 'react'
-import styles from './auth.module.css'
+import AuthFormSchema from '@/components/Auth/schema'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import styles from '@/components/Auth/auth.module.css'
 import { AlertCircle, Eye, EyeOff } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { FieldErrors, FieldValues, SubmitHandler, UseControllerProps, UseFormHandleSubmit, UseFormRegister, UseFormReturn } from 'react-hook-form'
+import { useState } from 'react'
+import { AuthFormFields } from '@/types/auth'
+import clsx from 'clsx'
 
+const SignupFormSchema = AuthFormSchema
 
-// interface AuthFormProps<T extends FieldValues> {
-//     errors: FieldErrors<T>,
-//     register: UseFormRegister<T>,
-//     handleSubmit: UseFormHandleSubmit<T>,
-//     isSubmitting: boolean,
-//     onSubmit: SubmitHandler<T>
+type SignupFormFields = AuthFormFields
 
-// }
-
-interface AuthFormProps<T extends FieldValues> {
-    form: UseFormReturn<T>,
-    onSubmit: SubmitHandler<T>,
-}
-
-const AuthForm = <T extends FieldValues>({ form, onSubmit }: AuthFormProps<T>) => {
+const SignupForm = () => {
     const [currentType, setCurrentType] = useState<'password' | 'text'>('password')
+    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<AuthFormFields>({ resolver: zodResolver(SignupFormSchema) })
 
-    const { register, handleSubmit, formState: { errors, isSubmitting } } = form
 
+    const onSubmit: SubmitHandler<SignupFormFields> = (data) => {
+
+    }
 
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-            <h1 className={styles.heading}>Log in to P Monger</h1>
+            <h1 className={styles.heading}>Sign up to P Monger</h1>
             <a href="" className={styles.oauthBtn}>
                 <Image height={18} width={18} src="/google-logo.svg" alt="google-logo" />
                 <span>Continue with Google</span>
@@ -90,15 +85,13 @@ const AuthForm = <T extends FieldValues>({ form, onSubmit }: AuthFormProps<T>) =
                 </span>
             </div>
 
+            <button disabled={isSubmitting} className={clsx(styles.submitBtn, isSubmitting && 'disabledBtn')}>Sign up</button>
             <div className={styles.switchPageLinks}>
-                <Link href={'/signup'}>Sign up</Link>
+                <Link href={'/login'}>Log in</Link>
                 {/* <Link href={'/signup'}>Forgot Password?</Link> */}
             </div>
         </form >
     )
 }
 
-export default AuthForm
-
-
-
+export default SignupForm

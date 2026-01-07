@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import React from 'react'
+import SignupForm from './SignupForm'
 
 
 export const metadata: Metadata = {
@@ -10,9 +11,7 @@ export const metadata: Metadata = {
 
 const Signup = () => {
   return (
-    <div>
-
-    </div>
+    <SignupForm />
   )
 }
 

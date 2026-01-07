@@ -121,13 +121,13 @@ const Form = ({ product, onSubmit, handleFileChange, tempURL, fileError }: FormP
           {fileError && <div className={styles.errorMsg}>{fileError}</div>}
         </FieldBase>
         <div className={styles.submitBtns}>
-          {/* <button disabled={isSubmitting} {...register('status')} name='status' value='Draft' className={clsx(styles.draftBtn, isSubmitting && styles.disabledBtn)}>
+          {/* <button disabled={isSubmitting} {...register('status')} name='status' value='Draft' className={clsx(styles.draftBtn, isSubmitting && 'disabledBtn')}>
             <Save /> Save as Draft
           </button>
-          <button disabled={isSubmitting} {...register('status')} name='status' value='Published' className={clsx(styles.publishBtn, isSubmitting && styles.disabledBtn)}>
+          <button disabled={isSubmitting} {...register('status')} name='status' value='Published' className={clsx(styles.publishBtn, isSubmitting && 'disabledBtn')}>
             <CloudUpload />  Publish
           </button> */}
-          <button disabled={isSubmitting} className={clsx(product ? styles.draftBtn : styles.publishBtn, isSubmitting && styles.disabledBtn)}>
+          <button disabled={isSubmitting} className={clsx(product ? styles.draftBtn : styles.publishBtn, isSubmitting && 'disabledBtn')}>
             {product ? <> <Save /> Save Changes </> : <><CloudUpload />  Add Product</>}
           </button>
         </div>
