@@ -115,6 +115,10 @@ input::-webkit-inner-spin-button {
     --clr-red-500: #E53935;
     --clr-red-600: #FF2C2C;
 
+    --clr-yellow-400: hsl(53, 81%, 65%);
+    --clr-yellow-500: hsl(43, 68%, 43%);
+    --clr-yellow-600: hsl(53, 81%, 65%);
+
     /* Sonner */
 
 

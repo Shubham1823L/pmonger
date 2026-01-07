@@ -89,7 +89,7 @@ const Product = async ({ params }: ProductProps) => {
                     <LineBreak />
                     <section>
                         <h3>Status</h3>
-                        <span style={{ color: product.status === "Published" ? 'green' : "yellow" }}>{product.status}</span>
+                        <span style={{ color: product.status === "Published" ? 'var(--clr-green-500)' : "var(--clr-yellow-500)" }}>{product.status}</span>
                     </section>
                     <LineBreak />
                     <section>
