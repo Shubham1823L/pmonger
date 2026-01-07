@@ -7,7 +7,7 @@ name: deploy
 
 jobs:
   build-and-deploy:
-    runs-on: ubunut-latest
+    runs-on: ubunutu-latest
 
     steps:
     - name: Checkout code (fetch latest repo code)
@@ -45,7 +45,7 @@ jobs:
         host: ${{ secrets.EC2_HOST }}
         username: ubuntu
         key: ${{ secrets.EC2_SSH_KEY }}
-        source: "compose.prod.yaml,nginx, deploy.sh"
+        source: "compose.prod.yaml,nginx,deploy.sh"
         target: /opt/myapp
 
     - name: Run deploy.sh on EC2
