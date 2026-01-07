@@ -1,0 +1,42 @@
+services:
+  web:
+    image: ghcr.io/shubham1823l/pmonger-web:lastestHashedCommit
+    expose:
+      - "80"
+    container_name: pmonger_web
+    volumes:
+      - ./nginx/web.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - pmonger_net
+    restart: unless-stopped
+
+  api:
+    image: ghcr.io/shubham1823l/pmonger-api:latestHashedCommit
+    expose:
+      - "8080"
+    container_name: pmonger_api
+    networks:
+      - pmonger_net
+    restart: unless-stopped
+    env_file: ./api/.env.production
+
+
+  nginx:
+    image: nginx:1.29.3
+    ports:
+      - "80:80"
+      - "443:443"
+    container_name: pmonger_nginx
+    networks:
+      - pmonger_net
+    restart: unless-stopped
+    volumes:
+      - ./nginx/default:conf:/etc/nginx/conf.d/default.conf:ro
+
+volumes:
+  certbot_certificates:
+
+
+networks:
+  pmonger_net:
+

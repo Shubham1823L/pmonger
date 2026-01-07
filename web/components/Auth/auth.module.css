@@ -1,0 +1,106 @@
+.form {
+    display: grid;
+    gap: 1rem;
+}
+
+.heading {
+    font-weight: 400;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.textField {
+    display: grid;
+    gap: .5rem;
+
+}
+
+.inputHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+
+}
+
+.input {
+    border-radius: 5px;
+    padding: .8em 1em;
+    font-size: 15px;
+    border: 1px solid var(--font-neutral);
+}
+
+.showPassword {
+    display: flex;
+    align-items: center;
+    gap: .25rem;
+    font-size: 14px;
+    color: var(--primary-200);
+}
+
+.errorMsg {
+    color: var(--clr-red-500);
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-size: 15px;
+}
+
+.seperator {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+
+    >div {
+        flex: 1;
+        height: 2px;
+        background-color: var(--neutral-border-lighter);
+    }
+}
+
+
+.oauthBtn {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    justify-content: center;
+    border-radius: 5px;
+    border: 1px solid var(--font-neutral);
+    transition: all .2s linear;
+    padding: 1em;
+
+    &:hover {
+        background-color: var(--neutral-500);
+    }
+}
+
+.switchPageLinks {
+    display: flex;
+    justify-content: space-between;
+    gap: .5rem;
+
+    a {
+        color: var(--primary-200);
+        padding: .5em;
+
+        &:hover {
+            text-decoration: underline;
+        }
+
+        &:active {
+            color: var(--font-neutral);
+        }
+    }
+}
+
+.submitBtn {
+    padding: 1em;
+    text-align: center;
+    border-radius: 8px;
+    background-color: var(--primary-400);
+    transition: all .15s linear;
+
+    &:hover {
+        background-color: var(--primary-300);
+    }
+}

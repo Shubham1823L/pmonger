@@ -10,15 +10,15 @@ export default async function proxy(req: NextRequest) {
     const { pathname } = req.nextUrl
     const res = NextResponse.next()
 
-    const isProtectedRoute = protectedRoutes.includes(pathname)
-    const isAntiProtectedRoute = antiProtectedRoutes.includes(pathname)
+    const isProtectedRoute = protectedRoutes.filter(path => pathname.startsWith(path)).length
+    const isAntiProtectedRoute = antiProtectedRoutes.filter(path => pathname.startsWith(path)).length
 
     const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL
     const accessToken = req.cookies.get('accessToken')
     const refreshToken = req.cookies.get('refreshToken')
     if (accessToken) {
-        if (!accessToken && isProtectedRoute) NextResponse.redirect(new URL('/login', req.nextUrl))
-        if (accessToken && isAntiProtectedRoute) NextResponse.redirect(new URL('/dashboard', req.nextUrl))
+        if (!accessToken && isProtectedRoute) return NextResponse.redirect(new URL('/login', req.nextUrl))
+        if (accessToken && isAntiProtectedRoute) return NextResponse.redirect(new URL('/dashboard', req.nextUrl))
         return res
     }
 
@@ -35,13 +35,13 @@ export default async function proxy(req: NextRequest) {
 
 
 
-        if (!response.ok && isProtectedRoute) NextResponse.redirect(new URL('/login', req.nextUrl))
-        if (response.ok && isAntiProtectedRoute) NextResponse.redirect(new URL('/dashboard', req.nextUrl))
+        if (!response.ok && isProtectedRoute) return NextResponse.redirect(new URL('/login', req.nextUrl))
+        if (response.ok && isAntiProtectedRoute) return NextResponse.redirect(new URL('/dashboard', req.nextUrl))
         return res
     }
 
 
-    if (isProtectedRoute) NextResponse.redirect(new URL('/login', req.nextUrl))
+    if (isProtectedRoute) return NextResponse.redirect(new URL('/login', req.nextUrl))
     return res
 
 }

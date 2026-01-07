@@ -5,6 +5,8 @@ import Link from 'next/link'
 import fetchData from '@/lib/fetchData'
 import { type Product } from '@/types/product'
 import EditProductForm from '@/components/Products/EditProductForm'
+import { ApiError } from '@/types/api'
+import { redirect } from 'next/navigation'
 
 export const metadata: Metadata = {
     title: 'Edit Product - P Monger',
@@ -23,8 +25,7 @@ const Edit = async ({ params }: EditProps) => {
         const response = await fetchData<{ product: Product }>('get', `/products/${id}`)
         data = response.data.data
     } catch (error) {
-        console.error('GG nigga!')
-        return <div>GG NIGGA!</div>
+        return redirect('/dashboard')
     }
 
     const { product } = data

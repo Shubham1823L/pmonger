@@ -385,7 +385,8 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   User: 'User',
-  Product: 'Product'
+  Product: 'Product',
+  SignupSession: 'SignupSession'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -401,7 +402,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "product"
+    modelProps: "user" | "product" | "signupSession"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -553,6 +554,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    SignupSession: {
+      payload: Prisma.$SignupSessionPayload<ExtArgs>
+      fields: Prisma.SignupSessionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SignupSessionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SignupSessionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SignupSessionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SignupSessionPayload>
+        }
+        findFirst: {
+          args: Prisma.SignupSessionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SignupSessionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SignupSessionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SignupSessionPayload>
+        }
+        findMany: {
+          args: Prisma.SignupSessionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SignupSessionPayload>[]
+        }
+        create: {
+          args: Prisma.SignupSessionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SignupSessionPayload>
+        }
+        createMany: {
+          args: Prisma.SignupSessionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SignupSessionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SignupSessionPayload>[]
+        }
+        delete: {
+          args: Prisma.SignupSessionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SignupSessionPayload>
+        }
+        update: {
+          args: Prisma.SignupSessionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SignupSessionPayload>
+        }
+        deleteMany: {
+          args: Prisma.SignupSessionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SignupSessionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SignupSessionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SignupSessionPayload>[]
+        }
+        upsert: {
+          args: Prisma.SignupSessionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SignupSessionPayload>
+        }
+        aggregate: {
+          args: Prisma.SignupSessionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSignupSession>
+        }
+        groupBy: {
+          args: Prisma.SignupSessionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SignupSessionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SignupSessionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SignupSessionCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -618,6 +693,18 @@ export const ProductScalarFieldEnum = {
 } as const
 
 export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
+
+
+export const SignupSessionScalarFieldEnum = {
+  otpUUID: 'otpUUID',
+  otpHash: 'otpHash',
+  email: 'email',
+  passwordHash: 'passwordHash',
+  fullName: 'fullName',
+  createdAt: 'createdAt'
+} as const
+
+export type SignupSessionScalarFieldEnum = (typeof SignupSessionScalarFieldEnum)[keyof typeof SignupSessionScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -816,6 +903,7 @@ export type PrismaClientOptions = ({
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   product?: Prisma.ProductOmit
+  signupSession?: Prisma.SignupSessionOmit
 }
 
 /* Types for Logging */

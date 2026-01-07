@@ -49,3 +49,8 @@ export type User = Prisma.UserModel
  * 
  */
 export type Product = Prisma.ProductModel
+/**
+ * Model SignupSession
+ * 
+ */
+export type SignupSession = Prisma.SignupSessionModel

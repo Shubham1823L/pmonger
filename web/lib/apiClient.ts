@@ -16,6 +16,11 @@ const apiClient = async <T,>(method: Method, input: RequestInfo, bodyData?: obje
             body: JSON.stringify(bodyData)
         })
 
+        if (response.status === 204) {
+            const data = { success: true, data: "No-Contetn", message: "No-Content" }
+            return { status: response.status, data } as ApiSuccess<T>
+        }
+
         const data = await response.json()
         const finalResponse = { status: response.status, data }
 

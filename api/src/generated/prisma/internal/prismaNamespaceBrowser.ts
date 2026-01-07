@@ -52,7 +52,8 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
-  Product: 'Product'
+  Product: 'Product',
+  SignupSession: 'SignupSession'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -97,6 +98,18 @@ export const ProductScalarFieldEnum = {
 } as const
 
 export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
+
+
+export const SignupSessionScalarFieldEnum = {
+  otpUUID: 'otpUUID',
+  otpHash: 'otpHash',
+  email: 'email',
+  passwordHash: 'passwordHash',
+  fullName: 'fullName',
+  createdAt: 'createdAt'
+} as const
+
+export type SignupSessionScalarFieldEnum = (typeof SignupSessionScalarFieldEnum)[keyof typeof SignupSessionScalarFieldEnum]
 
 
 export const SortOrder = {
