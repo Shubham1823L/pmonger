@@ -9,6 +9,10 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { AuthFormFields } from '@/types/auth'
 import clsx from 'clsx'
+import { toast } from 'sonner'
+import apiClient from '@/lib/apiClient'
+import { ApiError } from '@/types/api'
+import { useRouter } from 'next/navigation'
 
 const SignupFormSchema = AuthFormSchema
 
@@ -16,11 +20,54 @@ type SignupFormFields = AuthFormFields
 
 const SignupForm = () => {
     const [currentType, setCurrentType] = useState<'password' | 'text'>('password')
-    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<AuthFormFields>({ resolver: zodResolver(SignupFormSchema) })
+    const { register, handleSubmit, formState: { errors, isSubmitting }, setError } = useForm<AuthFormFields>({ resolver: zodResolver(SignupFormSchema) })
+
+    const router = useRouter()
 
 
-    const onSubmit: SubmitHandler<SignupFormFields> = (data) => {
+    const onSubmit: SubmitHandler<SignupFormFields> = async (data) => {
+        toast.loading('Verifying Credentials', {
+            id: 'signup'
+        })
 
+        try {
+            await apiClient('post', '/auth/signup', data)
+            toast.success('OTP Sent', {
+                id: 'signup',
+                description: "An OTP has been sent to your email",
+                duration:1500
+            })
+            router.push('/signup/verify')
+        } catch (error) {
+            if (!error) return toast.error('Internal Error', {
+                description: 'Something went wrong !',
+                id: 'signup'
+            })
+
+
+            if (typeof error === 'object' && !Array.isArray(error)) {
+                toast.dismiss('signup')
+                if (!error.status) return toast.error('Internal Error', {
+                    description: 'Something went wrong !',
+                    id: 'signup'
+                })
+
+                const { status, data: { code, message } } = error as ApiError
+                if (status >= 500) return toast.error('Internal Error', {
+                    description: 'Something went wrong !',
+                    id: 'signup'
+                })
+
+                if (status === 400) return setError('root', { message })
+                if (status === 409) return setError('email', { message })
+
+            }
+            toast.error('Internal Error', {
+                id: 'signup',
+                description: "Something went wrong !"
+            })
+
+        }
     }
 
 
@@ -44,7 +91,7 @@ const SignupForm = () => {
                 <div className={styles.inputHeader}>
                     <label htmlFor="email">Email</label>
                 </div>
-                <input className={styles.input} type="text" name='email' id='email' />
+                <input {...register('email')} className={styles.input} type="text" name='email' id='email' />
                 {errors.email && <span className={styles.errorMsg}>
                     <AlertCircle size={20} color='var(--clr-red-500)' />
                     {errors.email.message}
@@ -68,23 +115,26 @@ const SignupForm = () => {
                         }
                     </button>
                 </div>
-                <input className={styles.input} type={currentType} name='password' id='password' />
-                <span className={styles.errorMsg}>
+                <input {...register('password')} className={styles.input} type={currentType} name='password' id='password' />
+                {errors.password && <span className={styles.errorMsg}>
                     <AlertCircle size={20} color='var(--clr-red-500)' />
-                    Error message
-                </span>
+                    {errors.password.message}
+                </span>}
             </div>
             <div className={styles.textField}>
                 <div className={styles.inputHeader}>
                     <label htmlFor="fullName">Full Name</label>
                 </div>
-                <input className={styles.input} type="text" name='fullName' id='fullName' />
-                <span className={styles.errorMsg}>
+                <input {...register('fullName')} className={styles.input} type="text" name='fullName' id='fullName' />
+                {errors.fullName && <span className={styles.errorMsg}>
                     <AlertCircle size={20} color='var(--clr-red-500)' />
-                    Error message
-                </span>
+                    {errors.fullName.message}
+                </span>}
             </div>
-
+            {errors.root && <span className={styles.errorMsg}>
+                <AlertCircle size={20} color='var(--clr-red-500)' />
+                {errors.root.message}
+            </span>}
             <button disabled={isSubmitting} className={clsx(styles.submitBtn, isSubmitting && 'disabledBtn')}>Sign up</button>
             <div className={styles.switchPageLinks}>
                 <Link href={'/login'}>Log in</Link>

@@ -16,8 +16,8 @@ model User {
 }
 
 model Product {
-  id             String  @id @default(uuid())
-  name           String  @unique
+  id             String @id @default(uuid())
+  name           String @unique
   avatarPublicId String
 
   price        Float
@@ -25,7 +25,7 @@ model Product {
   minimumStock Int           @default(0)
   status       ProductStatus
   category     String
-  description  String       
+  description  String
   //###FIX time issue later
   createdAt    DateTime      @default(now()) @db.Timestamptz(3)
   updatedAt    DateTime      @updatedAt @db.Timestamptz(3)
@@ -38,14 +38,11 @@ enum ProductStatus {
   Published
 }
 
-// model OtpLimit {
-
-// }
-
-// model SignupSession {
-//   otpUUID String @id 
-//   otpHash String
-//   email String
-//   passwordHash String
-//   fullName String
-// }
+model SignupSession {
+  otpUUID      String   @id
+  otpHash      String
+  email        String
+  passwordHash String
+  fullName     String
+  createdAt    DateTime @default(now()) @db.Timestamptz(3)
+}

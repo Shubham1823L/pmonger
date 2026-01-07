@@ -1,4 +1,4 @@
-import { ACCESS_COOKIE_OPTIONS, REFRESH_COOKIE_OPTIONS } from './../libs/cookieOptions';
+import { ACCESS_COOKIE_OPTIONS, OAUTH_COOKIE_OPTIONS, REFRESH_COOKIE_OPTIONS } from './../libs/cookieOptions';
 import { RequestHandler } from "express"
 import prisma from "../config/prisma"
 import * as z from 'zod'
@@ -7,6 +7,7 @@ import { generateAccessToken, generateRefreshToken, generateUint8Array } from ".
 import { jwtVerify } from 'jose';
 import env from '../config/env';
 import crypto from 'crypto'
+import { sendOtp } from '../services/nodemailer';
 
 
 const SignupSchema = z.object({
@@ -23,7 +24,7 @@ const LoginSchema = z.object({
 
 export const signup: RequestHandler = async (req, res) => {
     const parsedData = SignupSchema.safeParse(req.body)
-    if (!parsedData.success) return res.fail(400, "BAD_REQUEST", "Invalid Details")
+    if (!parsedData.success) return res.fail(400, "BAD_REQUEST", "Invalid Credentials")
 
     const { data: { email, password, fullName } } = parsedData
 
@@ -38,32 +39,27 @@ export const signup: RequestHandler = async (req, res) => {
         parallelism: 1 // threads used
     })
 
-    const user = await prisma.user.create({
-        data: {
-            email, fullName, passwordHash
-        },
-        select: { id: true, email: true, fullName: true }
-    })
 
-    const accessToken = await generateAccessToken(email)
-    const refreshToken = await generateRefreshToken(email)
-
-    res.cookie('accessToken', accessToken, ACCESS_COOKIE_OPTIONS)
-    res.cookie('refreshToken', refreshToken, REFRESH_COOKIE_OPTIONS)
-
-    return res.success(201, { user }, "Account created successfully")
-
+    const accessTokenPromise = generateAccessToken(email)
+    const refreshTokenPromise = generateRefreshToken(email)
 
     const otp = crypto.randomInt(1e5, 1e6 - 1)
 
     //Generating otpHash
-    const otpHash = await argon2.hash(otp.toString(), {
+    const otpHashPromise = argon2.hash(otp.toString(), {
         type: argon2.argon2id,
         memoryCost: 64 * 1024,
         timeCost: 3,
         parallelism: 1
     })
 
+    const [accessToken, refreshToken, otpHash] = await Promise.all([accessTokenPromise, refreshTokenPromise, otpHashPromise])
+
+    res.cookie('accessToken', accessToken, ACCESS_COOKIE_OPTIONS)
+    res.cookie('refreshToken', refreshToken, REFRESH_COOKIE_OPTIONS)
+
+
+    // ###LATER , no complex logic for this project probably, lets focust on TS, Next,Postgres, and survivability
     //Otp window will remain valid for 15mins
     //Otp will remain valid for 5 mins
 
@@ -73,6 +69,62 @@ export const signup: RequestHandler = async (req, res) => {
     //User may resend otp 2 times per window
     //Total no. of otp request including first ones = 6 attempts/24hrs , this is the limit for that particular email to be registered
 
+    const otpUUID = crypto.randomUUID()
+
+    await prisma.signupSession.create({
+        data: {
+            email,
+            fullName,
+            passwordHash,
+            otpHash,
+            otpUUID
+        }
+    })
+    sendOtp(email, otp)
+    res.cookie('otpUUID', otpUUID, OAUTH_COOKIE_OPTIONS)
+
+    return res.success()
+
+
+}
+
+
+export const verifyOtp: RequestHandler = async (req, res) => {
+    const otp = req.body.otp
+    if (!otp) return res.fail(400)
+    const otpUUID = req.cookies.otpUUID
+    if (!otpUUID) return res.fail(410, "SESSION_EXPIRED", "Session Expired, please re-signup")
+
+    const signupSession = await prisma.signupSession.findUnique({
+        where: {
+            otpUUID
+        }
+    })
+    if (!signupSession) return res.fail(400)
+
+    const { email, fullName, otpHash, passwordHash, createdAt } = signupSession
+    if (new Date(Date.now() - 5 * 60 * 1000) >= createdAt) return res.fail(410, "SESSION_EXPIRED", "Session expired, please re-signup")
+
+    if (!await argon2.verify(otpHash, otp.toString())) return res.fail(401)
+
+    const userPromise = prisma.user.create({
+        data: {
+            email,
+            passwordHash,
+            fullName
+        }
+    })
+
+    const deleteSignupSessionPromise = prisma.signupSession.delete({
+        where: {
+            otpUUID
+        }
+    })
+
+    const [user] = await Promise.all([userPromise, deleteSignupSessionPromise])
+    // ###LATER we should add TTL as well for residual shit
+
+    return res.success(201, { user }, "Account created successfully")
 }
 
 

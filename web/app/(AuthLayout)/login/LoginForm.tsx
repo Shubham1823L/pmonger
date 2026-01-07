@@ -31,7 +31,7 @@ const LoginForm = () => {
             id: 'login'
         })
         try {
-            await apiClient<{ id: string }>('post', '/auth/login', data)
+            await apiClient('post', '/auth/login', data)
             toast.success("Login Sucessful", {
                 description: "Redirecting...",
                 id: 'login',
@@ -51,7 +51,7 @@ const LoginForm = () => {
                     id: 'login'
                 })
 
-                const { status, data: { code, message } } = error as ApiError
+                const { status } = error as ApiError
                 if (status >= 500) return toast.error('Internal Error', {
                     description: 'Something went wrong !',
                     id: 'login'
@@ -60,7 +60,10 @@ const LoginForm = () => {
                 toast.dismiss('login')
                 return setError('root', { message: "Wrong email or password" })
             }
-            toast.dismiss('login')
+            toast.error('Internal Error', {
+                description: 'Something went wrong !',
+                id: 'login'
+            })
 
 
         }
