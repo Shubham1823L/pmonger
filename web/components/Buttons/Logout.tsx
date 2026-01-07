@@ -16,6 +16,7 @@ const Logout = ({ children, className }: { children: ReactNode, className?: stri
             router.replace('/login')
 
         } catch (error) {
+            console.error(error)
             toast.error("Request Failed", {
                 description: "Something went wrong !"
             })

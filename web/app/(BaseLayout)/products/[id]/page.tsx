@@ -7,6 +7,8 @@ import { type Product } from '@/types/product'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { getImgURL } from '@/lib/cloudinary'
+import { ApiError } from '@/types/api'
+import { redirect } from 'next/navigation'
 
 type ProductProps = {
     params: Promise<{ id: string }>,
@@ -40,8 +42,7 @@ const Product = async ({ params }: ProductProps) => {
         const response = await fetchData<{ product: Product }>('get', `/products/${id}`)
         data = response.data.data
     } catch (error) {
-        console.error('GG nigga!')
-        return <div>GG NIGGA!</div>
+        redirect('/dashboard')
     }
 
     const product = data.product
