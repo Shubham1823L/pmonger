@@ -20,7 +20,7 @@
     "outDir": "dist",
 
     /* Dev vs prod behavior */
-    "noEmit": true,
+    "noEmit": false,
     "allowJs": false,
     "allowImportingTsExtensions": false
   },
