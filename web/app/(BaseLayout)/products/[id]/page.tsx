@@ -6,6 +6,7 @@ import fetchData from '@/lib/fetchData'
 import { type Product } from '@/types/product'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
+import { getImgURL } from '@/lib/cloudinary'
 
 type ProductProps = {
     params: Promise<{ id: string }>,
@@ -17,7 +18,7 @@ export const generateMetadata = async ({ params }: generateMetadataProps): Promi
     const { id } = await params
     let data
     try {
-        const repsonse = await fetchData<{ product: Product }>('get', `/products/${id}`)
+        const repsonse = await fetchData<{ product: Product }>('get', `/products/${id}?page=1&limit=10`)
         data = repsonse.data.data
     } catch (error) {
         console.log("Could not fetch product data for page metadata")
@@ -45,6 +46,8 @@ const Product = async ({ params }: ProductProps) => {
 
     const product = data.product
 
+    const productAvatarURL = getImgURL(product.avatarPublicId, 400)
+
     return (
         <div className={productsStyles.wrapper}>
             <div className={productsStyles.header}>
@@ -56,7 +59,7 @@ const Product = async ({ params }: ProductProps) => {
             </div>
             <div className={styles.main}>
                 <div className={styles.imageWrapper}>
-                    <img className={styles.productImage} src="https://res.cloudinary.com/dvln1dlk4/image/upload/w_auto/q_auto/f_auto/v1767196817/lushiroProject_uploads/1767196816477-900961976_oamtmt.jpg" alt="product-image" />
+                    <img className={styles.productImage} src={productAvatarURL} alt="product-image" />
                 </div>
                 <article className={styles.details}>
                     <header>

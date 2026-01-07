@@ -7,7 +7,7 @@ import { ACCESS_COOKIE_OPTIONS, REFRESH_COOKIE_OPTIONS } from "../libs/cookieOpt
 
 const authMiddleware: RequestHandler = async (req, res, next) => {
     const accessToken = req.cookies.accessToken
-    if (!accessToken) return res.fail(401, 'TOKEN_NOT_FOUND', "Access Token was missing")
+    if (!accessToken) return res.fail(401, 'ACCESS_TOKEN_NOT_FOUND', "Access Token was missing")
 
     let decoded
     try {

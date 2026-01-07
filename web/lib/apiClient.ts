@@ -1,18 +1,16 @@
-import { ApiError, ApiSuccess } from "@/types/api"
-import { cookies } from "next/headers"
-import { redirect } from "next/navigation"
+import { ApiSuccess } from "@/types/api"
 
 
 type Method = "get" | "post" | "put" | "patch" | "delete"
 
-const fetchData = async <T,>(method: Method, input: RequestInfo, bodyData?: object): Promise<ApiSuccess<T>> => {
+const apiClient = async <T,>(method: Method, input: RequestInfo, bodyData?: object): Promise<ApiSuccess<T>> => {
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL
     try {
         const response = await fetch(`${baseUrl}${input}`, {
             method: method.toUpperCase(),
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
-                'Cookie': (await cookies()).toString()
             },
             cache: 'no-store',
             body: JSON.stringify(bodyData)
@@ -33,4 +31,4 @@ const fetchData = async <T,>(method: Method, input: RequestInfo, bodyData?: obje
 
 }
 
-export default fetchData
+export default apiClient

@@ -1,19 +1,18 @@
 import { Metadata } from 'next'
-import React from 'react'
-import prodcutsStyles from '../products.module.css'
+import productsStyles from '../products.module.css'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
-import Form from '@/components/Products/add-product/Form'
+import AddProductForm from '@/components/Products/AddProductForm'
 
 export const metadata: Metadata = {
-  title: "Add Product - PMonger",
+  title: "Add Product - P Monger",
   description: "Add new product"
 }
 
 const AddProduct = () => {
   return (
-    <div className={prodcutsStyles.wrapper}>
-      <div className={prodcutsStyles.header}>
+    <div className={productsStyles.wrapper}>
+      <div className={productsStyles.header}>
         <h1>Add Product</h1>
         <Link href='/products'>
           <ArrowLeft size={24} />
@@ -21,7 +20,7 @@ const AddProduct = () => {
         </Link>
       </div>
 
-      <Form />
+      <AddProductForm />
 
     </div>
   )

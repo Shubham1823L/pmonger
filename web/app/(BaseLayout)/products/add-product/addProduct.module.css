@@ -16,9 +16,10 @@
         overflow: hidden;
         display: flex;
         flex-direction: column;
+        padding-bottom: 1rem;
 
         >div {
-            margin: .25rem 1rem 1rem 1rem;
+            margin: .25rem 1rem 0 1rem;
         }
     }
 
@@ -51,8 +52,8 @@
 }
 
 .category {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: .5rem;
 
     select {
@@ -61,10 +62,17 @@
         padding: .5em 1em;
         width: 100%;
     }
+
+    >div {
+        display: grid;
+        grid-template-rows: subgrid;
+        grid-row: 1/4;
+    }
 }
 
 .selectWrapper {
     position: relative;
+
 
     >svg {
         position: absolute;
@@ -79,12 +87,14 @@
 
 
 .stock {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 1rem;
 
     >* {
-        flex: 1;
         display: grid;
+        grid-template-rows: subgrid;
+        grid-row: 1/4;
         gap: .5rem;
     }
 }
@@ -158,29 +168,41 @@
         padding: .3em .9em;
     }
 
-    .draftBtn{
+    .draftBtn {
         transition: all .15s linear;
-        &:hover{
+
+        &:hover {
             background-color: var(--neutral-border);
         }
-        &:active{
-            background-color:var(--neutral) ;
+
+        &:active {
+            background-color: var(--neutral);
         }
     }
+
     .publishBtn {
         border-color: var(--primary-400);
         background-color: var(--primary-400);
         transition: all .15s linear;
-        &:hover{
+
+        &:hover {
             background-color: var(--primary-300);
         }
-        &:active{
+
+        &:active {
             background-color: var(--primary-400);
         }
     }
 }
 
-.disabledBtn{
+.disabledBtn {
     opacity: .7;
     pointer-events: none;
+}
+
+.errorMsg {
+    color: red;
+    font-size: 14px;
+    padding-left: .75rem;
+    margin-block: 0 !important;
 }

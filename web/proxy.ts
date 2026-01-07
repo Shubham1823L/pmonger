@@ -13,14 +13,16 @@ export default async function proxy(req: NextRequest) {
     const isProtectedRoute = protectedRoutes.includes(pathname)
     const isAntiProtectedRoute = antiProtectedRoutes.includes(pathname)
 
-    const baseURL = process.env.NEXT_API_BASE_URL
+    const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL
     const accessToken = req.cookies.get('accessToken')
+    const refreshToken = req.cookies.get('refreshToken')
     if (accessToken) {
         if (!accessToken && isProtectedRoute) NextResponse.redirect(new URL('/login', req.nextUrl))
         if (accessToken && isAntiProtectedRoute) NextResponse.redirect(new URL('/dashboard', req.nextUrl))
+        return res
     }
 
-    else {
+    else if (refreshToken) {
         const response = await fetch(`${baseURL}/auth/validateSession`, {
             method: "POST",
             headers: {
@@ -35,9 +37,11 @@ export default async function proxy(req: NextRequest) {
 
         if (!response.ok && isProtectedRoute) NextResponse.redirect(new URL('/login', req.nextUrl))
         if (response.ok && isAntiProtectedRoute) NextResponse.redirect(new URL('/dashboard', req.nextUrl))
+        return res
     }
 
 
+    if (isProtectedRoute) NextResponse.redirect(new URL('/login', req.nextUrl))
     return res
 
 }

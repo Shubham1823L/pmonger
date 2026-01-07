@@ -1,6 +1,6 @@
 import express from 'express'
 import asyncHandler from '../utils/asyncHandler'
-import { deleteProduct, getProduct, getProducts, publishNewProduct, updateProduct } from '../controllers/productControllers'
+import { deleteProduct, deleteProducts, getProduct, getProducts, publishNewProduct, updateProduct } from '../controllers/productControllers'
 import prisma from '../config/prisma'
 import authMiddleware from '../middlewares/authMiddleware'
 
@@ -12,6 +12,7 @@ router.use(asyncHandler(authMiddleware))
 router.route('/')
     .get(asyncHandler(getProducts))
     .post(asyncHandler(publishNewProduct))
+    .delete(asyncHandler(deleteProducts))
 
 
 router.route('/:productId')
@@ -27,9 +28,9 @@ router.param('productId', async (req, res, next, productId) => {
     //Check if associated product exists and user is the real owner
     try {
         const product = await prisma.product.findUnique({ where: { id: productId } })
-        if (!product) return res.fail(404, "NOT_FOUND", "Product does not exist")
-        if (product.ownerId != user.id) return res.fail(403, "UNAUTHRORIZED", "Can access your products only")
-        req.body = { product }
+        //For security purposes , we do not forward 403 incase of wrong ownership
+        if (!product || product.ownerId != user.id) return res.fail(404, "NOT_FOUND", "Product does not exist")
+        req.body = { ...req.body, attachedProduct: product }
         next()
     } catch (error) {
         next(error)
