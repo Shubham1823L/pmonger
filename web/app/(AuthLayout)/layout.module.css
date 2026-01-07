@@ -1,0 +1,15 @@
+.main{
+    background-color: var(--neutral-lighter);
+    padding: 1rem;
+    min-height: 100vh;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.formWrapper{
+    min-height: 80vh;
+    min-width: 520px;
+
+}

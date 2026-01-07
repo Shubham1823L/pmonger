@@ -10,8 +10,8 @@ export default async function proxy(req: NextRequest) {
     const { pathname } = req.nextUrl
     const res = NextResponse.next()
 
-    const isProtectedRoute = protectedRoutes.includes(pathname)
-    const isAntiProtectedRoute = antiProtectedRoutes.includes(pathname)
+    const isProtectedRoute = protectedRoutes.filter(path => pathname.startsWith(path)).length
+    const isAntiProtectedRoute = antiProtectedRoutes.filter(path => pathname.startsWith(path)).length
 
     const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL
     const accessToken = req.cookies.get('accessToken')
